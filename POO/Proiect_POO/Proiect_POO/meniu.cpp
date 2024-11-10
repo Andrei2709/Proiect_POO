@@ -36,7 +36,7 @@ void Meniu_Principal(Client clienti[], int nr_clienti)
 
     system("cls");
     cout << "<Meniu principal> Selectati optiunea dorita:" << endl << endl;
-    cout << "< 1 > Log-in" << endl << "< 2 > Inregistrare client nou" << endl << "< 3 > MENIU DATA" << endl << endl;
+    cout << "< 1 > Log-in" << endl << "< 2 > Inregistrare client nou" << endl << "< 3 > MENIU DATA" << endl<< "< 4 > Inchidere program" << endl << endl;
     cout << "Optiunea dumneavoastra: ";
     cin >> optiune_princ;
     cout << endl;
@@ -486,9 +486,16 @@ void Meniu_Principal(Client clienti[], int nr_clienti)
 
 
                     if (Revenire_Meniu_Principal())
-                        ok_optiune = 0;
+                    {
+                        ok_optiune_princ = 0;
+                        system("cls");
+                        cout << "<Meniu principal> Selectati optiunea dorita:" << endl << endl;
+                        cout << "< 1 > Log-in" << endl << "< 2 > Inregistrare client nou" << endl << "< 3 > MENIU DATA" << endl << "< 4 > Inchidere program"<< endl << endl;
+                        cout << "Optiunea dumneavoastra: ";
+                        cin >> optiune_princ;
+                        cout << endl;
+                    }
 
-                    ok_optiune = 0;
                     break;
                 }
 
@@ -520,14 +527,26 @@ void Meniu_Principal(Client clienti[], int nr_clienti)
             int ok_inregistrare = 0;
             while (ok_inregistrare == 0)
             {
-                string cod_client_nou = { "000" };
+                string cod_client_nou = { "0000" };
 
-                cout << "Introduceti codul de client dorit (format din 3 majuscule): ";
-                cin >> cod_client_nou[0]>>cod_client_nou[1]>>cod_client_nou[2];
+                cout << "Introduceti codul de client dorit (format din 4 majuscule): ";
+                cin >> cod_client_nou[0]>>cod_client_nou[1]>>cod_client_nou[2]>>cod_client_nou[3];
                 cout << endl;
-                if ((cod_client_nou[0] < 'A' || cod_client_nou[0] > 'Z') || (cod_client_nou[1] < 'A' || cod_client_nou[1] > 'Z') || (cod_client_nou[2] < 'A' || cod_client_nou[2] > 'Z'))
+
+                int ok_cod_nou = 1;
+                for (int i = 0; i < nr_clienti; i++)
                 {
-                    cout << "Cod invalid. ";
+                    if (clienti[i].Verificare_Cod(cod_client_nou))
+                    {
+                        ok_cod_nou = 0;
+                        break;
+                    }
+         
+                }
+
+                if (ok_cod_nou==0 || (cod_client_nou[0] < 'A' || cod_client_nou[0] > 'Z') || (cod_client_nou[1] < 'A' || cod_client_nou[1] > 'Z') || (cod_client_nou[2] < 'A' || cod_client_nou[2] > 'Z') || (cod_client_nou[3] < 'A' || cod_client_nou[3] > 'Z'))
+                {
+                    cout << "Cod invalid sau deja exista. ";
                 }
                 else
                 {
@@ -555,7 +574,7 @@ void Meniu_Principal(Client clienti[], int nr_clienti)
                 ok_optiune_princ = 0;
                 system("cls");
                 cout << "<Meniu principal> Selectati optiunea dorita:" << endl << endl;
-                cout << "< 1 > Log-in" << endl << "< 2 > Inregistrare client nou" << endl << "< 3 > MENIU DATA" << endl << endl;
+                cout << "< 1 > Log-in" << endl << "< 2 > Inregistrare client nou" << endl << "< 3 > MENIU DATA" << endl << "< 4 > Inchidere program" << endl << endl;
                 cout << "Optiunea dumneavoastra: ";
                 cin >> optiune_princ;
                 cout << endl;
@@ -574,6 +593,23 @@ void Meniu_Principal(Client clienti[], int nr_clienti)
                 clienti[i].Afisare_Client();
             }
 
+            if (Revenire_Meniu_Principal())
+            {
+                ok_optiune_princ = 0;
+                system("cls");
+                cout << "<Meniu principal> Selectati optiunea dorita:" << endl << endl;
+                cout << "< 1 > Log-in" << endl << "< 2 > Inregistrare client nou" << endl << "< 3 > MENIU DATA" << endl << "< 4 > Inchidere program" << endl << endl;
+                cout << "Optiunea dumneavoastra: ";
+                cin >> optiune_princ;
+                cout << endl;
+            }
+
+            break;
+        }
+
+        case 4: // iesire program
+        {
+            ok_optiune_princ = 1;
             break;
         }
 
@@ -592,5 +628,13 @@ void Meniu_Principal(Client clienti[], int nr_clienti)
         }
     }
 
+   /* ofstream fout("TEST.txt");
+   fout << nr_clienti << endl;
+
+    for (int i = 0; i < nr_clienti; i++)
+    {
+        clienti[i].Afisare_In_Fisier();
+    }
+    */
 }
 

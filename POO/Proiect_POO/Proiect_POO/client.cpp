@@ -36,7 +36,7 @@ void Client::Afisare_Client()
 void Client::Afisare_In_Fisier()
 {
 	ofstream of;
-	of.open("clienti.txt", std::ios::app);
+	of.open("TEST.txt", std::ios::app);
 
 	of << cod_client << " " << nume_client << " " << prenume_client << " " << debit.status << " " << debit.suma << " " << credit.status << " " << credit.suma;
 	of << endl;

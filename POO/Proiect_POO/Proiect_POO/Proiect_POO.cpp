@@ -30,8 +30,8 @@ int main()
 
     }
 
-   // ofstream fout("clienti.txt");
-    //fout << nr_clienti << endl;
+   //ofstream fout("TEST.txt");
+   //fout << nr_clienti << endl;
 
     Meniu_Principal(clienti,nr_clienti);
 
