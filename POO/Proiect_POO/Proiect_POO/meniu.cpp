@@ -118,7 +118,7 @@ void Meniu_Principal(Client clienti[], int nr_clienti)
                                 ok_opt_debit = 1;
 
                                 cout << "Suma din contul dumneavoastra de debit este de ";
-                                int suma_debit = clienti[client_activ].Afisare_Suma_Debit();
+                                float suma_debit = clienti[client_activ].Afisare_Suma_Debit();
                                 cout <<suma_debit<< " lei."<<endl<<endl;
 
                                 break;
@@ -129,9 +129,9 @@ void Meniu_Principal(Client clienti[], int nr_clienti)
                                 system("cls");
                                 ok_opt_debit = 1;
 
-                                int suma_debit = clienti[client_activ].Afisare_Suma_Debit();
+                                float suma_debit = clienti[client_activ].Afisare_Suma_Debit();
 
-                                int suma_retrasa=0;
+                                float suma_retrasa=0;
                                 while (suma_retrasa<1 || suma_retrasa>suma_debit)
                                 {
                                     cout << "Introduceti suma pe care doriti sa o retrageti: ";
@@ -152,9 +152,9 @@ void Meniu_Principal(Client clienti[], int nr_clienti)
                                 system("cls");
                                 ok_opt_debit = 1;
 
-                                int suma_debit = clienti[client_activ].Afisare_Suma_Debit();
+                                float suma_debit = clienti[client_activ].Afisare_Suma_Debit();
 
-                                int suma_depusa = 0;
+                                float suma_depusa = 0;
                                 while (suma_depusa < 1)
                                 {
                                     cout << "Introduceti suma pe care doriti sa o depuneti: ";
@@ -284,7 +284,7 @@ void Meniu_Principal(Client clienti[], int nr_clienti)
                                 system("cls");
                                 ok_opt_credit = 1;
 
-                                int suma_credit = clienti[client_activ].Afisare_Suma_Credit();
+                                float suma_credit = clienti[client_activ].Afisare_Suma_Credit();
 
                                 if (suma_credit != 0 && clienti[client_activ].Status_Credit() == 1)
                                 {
@@ -313,11 +313,11 @@ void Meniu_Principal(Client clienti[], int nr_clienti)
                                 system("cls");
                                 ok_opt_credit = 1;
 
-                                int suma_credit = clienti[client_activ].Afisare_Suma_Credit();
+                                float suma_credit = clienti[client_activ].Afisare_Suma_Credit();
 
                                 if (clienti[client_activ].Status_Credit() == 1)
                                 {
-                                    int suma_retrasa = 0;
+                                    float suma_retrasa = 0;
                                     while (suma_retrasa < 1 || suma_retrasa>1000000)
                                     {
                                         cout << "Introduceti suma pe care doriti sa o retrageti (maxim 1.000.000 lei): ";
@@ -343,7 +343,7 @@ void Meniu_Principal(Client clienti[], int nr_clienti)
                                 system("cls");
                                 ok_opt_credit = 1;
 
-                                int suma_credit = clienti[client_activ].Afisare_Suma_Credit();
+                                float suma_credit = clienti[client_activ].Afisare_Suma_Credit();
 
                                 if (suma_credit == 0)
                                 {
@@ -351,7 +351,7 @@ void Meniu_Principal(Client clienti[], int nr_clienti)
                                     break;
                                 }
 
-                                int suma_depusa = 0;
+                                float suma_depusa = 0;
                                 while (suma_depusa < 1 || suma_depusa > suma_credit)
                                 {
                                     cout << "Introduceti suma pe care doriti sa o depuneti: ";
@@ -393,7 +393,7 @@ void Meniu_Principal(Client clienti[], int nr_clienti)
 
                                 if (opt_data == 1)
                                 {
-                                    int suma_credit = clienti[client_activ].Afisare_Suma_Credit();
+                                    float suma_credit = clienti[client_activ].Afisare_Suma_Credit();
                                     if (suma_credit != 0 && clienti[client_activ].Status_Credit() == 1)
                                     {
                                         clienti[client_activ].Actualizare_Status_Credit(-1);
@@ -536,8 +536,8 @@ void Meniu_Principal(Client clienti[], int nr_clienti)
                                 system("cls");
                                 ok_opt_depozit = 1;
 
-                                int suma_debit = clienti[client_activ].Afisare_Suma_Debit();
-                                int suma_depozit = clienti[client_activ].Afisare_Suma_Depozit();
+                                float suma_debit = clienti[client_activ].Afisare_Suma_Debit();
+                                float suma_depozit = clienti[client_activ].Afisare_Suma_Depozit();
 
                                 if (suma_debit == 0)
                                 {
@@ -545,7 +545,7 @@ void Meniu_Principal(Client clienti[], int nr_clienti)
                                     break;
                                 }
 
-                                int suma_depusa = 0;
+                                float suma_depusa = 0;
                                 while (suma_depusa < 1 || suma_depusa > suma_debit)
                                 {
                                     cout << "Introduceti suma pe care doriti sa o depuneti: ";
@@ -577,8 +577,8 @@ void Meniu_Principal(Client clienti[], int nr_clienti)
                                 if (opt_data == 1)
                                 {
                                     cout << endl;
-                                    int suma_debit = clienti[client_activ].Afisare_Suma_Debit();
-                                    int suma_depozit = clienti[client_activ].Afisare_Suma_Depozit();
+                                    float suma_debit = clienti[client_activ].Afisare_Suma_Debit();
+                                    float suma_depozit = clienti[client_activ].Afisare_Suma_Depozit();
                                     clienti[client_activ].Actualizare_Suma_Debit(suma_debit + 1.05 * suma_depozit);
                                     clienti[client_activ].Actualizare_Suma_Depozit(0);
                                     cout << "Depozitul dumneavoastra a generat ";

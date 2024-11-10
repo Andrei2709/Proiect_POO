@@ -17,18 +17,15 @@ int main()
     string nume_client = "";
     string prenume_client = "";
     int status_debit = 0;
-    int suma_debit = 0;
+    float suma_debit = 0;
     int status_credit = 0; 
-    int suma_credit = 0;
-    int suma_depozit = 0;
+    float suma_credit = 0;
+    float suma_depozit = 0;
 
     for (int i = 0; i < nr_clienti; i++)
     {  
         fin >> cod_client >> nume_client >> prenume_client >> status_debit >> suma_debit >> status_credit >> suma_credit >> suma_depozit; // detaliile fiecarui client
         clienti[i].Citire_Client(cod_client, nume_client, prenume_client, status_debit, suma_debit, status_credit, suma_credit, suma_depozit); // sunt memorate
-
-        // clienti[i].Afisare_Client();
-
     }
 
    //ofstream fout("TEST.txt");

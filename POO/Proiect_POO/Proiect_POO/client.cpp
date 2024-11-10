@@ -17,7 +17,7 @@ Client::Client()
 	this->suma_depozit = 0;
 }
 
-void Client::Citire_Client(std::string cod_client, std::string nume_client, std::string prenume_client, int status_debit, int suma_debit, int status_credit, int suma_credit, int suma_depozit)
+void Client::Citire_Client(std::string cod_client, std::string nume_client, std::string prenume_client, int status_debit, float suma_debit, int status_credit, float suma_credit, float suma_depozit)
 {
 	this->cod_client = cod_client;
 	this->nume_client = nume_client;
@@ -112,32 +112,32 @@ void Client::Actualizare_Status_Credit(int status)
 	this->credit.status = status;
 }
 
-int Client::Afisare_Suma_Debit()
+float Client::Afisare_Suma_Debit()
 {
 	return this->debit.suma;
 }
 
-int Client::Afisare_Suma_Credit()
+float Client::Afisare_Suma_Credit()
 {
 	return this->credit.suma;
 }
 
-int Client::Afisare_Suma_Depozit()
+float Client::Afisare_Suma_Depozit()
 {
 	return this->suma_depozit;
 }
 
-void Client::Actualizare_Suma_Debit(int suma)
+void Client::Actualizare_Suma_Debit(float suma)
 {
 	this->debit.suma = suma;
 }
 
-void Client::Actualizare_Suma_Credit(int suma)
+void Client::Actualizare_Suma_Credit(float suma)
 {
 	this->credit.suma = suma;
 }
 
-void Client::Actualizare_Suma_Depozit(int suma)
+void Client::Actualizare_Suma_Depozit(float suma)
 {
 	this->suma_depozit = suma;
 }

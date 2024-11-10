@@ -8,7 +8,7 @@ class Client
 public:
 
 	Client();
-	void Citire_Client(std::string cod_client, std::string nume_client, std::string prenume_client, int status_debit, int suma_debit, int status_credit, int suma_credit, int suma_depozit);
+	void Citire_Client(std::string cod_client, std::string nume_client, std::string prenume_client, int status_debit, float suma_debit, int status_credit, float suma_credit, float suma_depozit);
 	void Afisare_Client();
 	void Afisare_In_Fisier();
 	bool Verificare_Cod(std::string cod);
@@ -18,12 +18,12 @@ public:
 	int Status_Credit();
 	void Actualizare_Status_Debit(int status);
 	void Actualizare_Status_Credit(int status);
-	int Afisare_Suma_Debit();
-	int Afisare_Suma_Credit();
-	int Afisare_Suma_Depozit();
-	void Actualizare_Suma_Debit(int suma);
-	void Actualizare_Suma_Credit(int suma);
-	void Actualizare_Suma_Depozit(int suma);
+	float Afisare_Suma_Debit();
+	float Afisare_Suma_Credit();
+	float Afisare_Suma_Depozit();
+	void Actualizare_Suma_Debit(float suma);
+	void Actualizare_Suma_Credit(float suma);
+	void Actualizare_Suma_Depozit(float suma);
 
 private:
 
@@ -35,22 +35,23 @@ private:
 	{
 	private:
 		int status; // 0 - nu exista cont; 1 - exista cont; -1 - cont blocat
-		int suma;
+		float suma;
 
 		friend class Client;
 
 	public:
 		Cont()
 		{
-			this->status = -1;
+			this->status = 0;
 			this->suma = -1;
 		}
 		Cont(int status) : status(status) {}
+		Cont(float suma) : suma(suma) {}
 	};
 	
 	Cont debit;
 	Cont credit;
-	int suma_depozit;
+	float suma_depozit;
 
 };
 
