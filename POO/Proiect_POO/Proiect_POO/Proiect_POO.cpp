@@ -26,7 +26,7 @@ int main()
         fin >> cod_client >> nume_client >> prenume_client >> status_debit >> suma_debit >> status_credit >> suma_credit; // detaliile fiecarui client
         clienti[i].Citire_Client(cod_client, nume_client, prenume_client, status_debit, suma_debit, status_credit, suma_credit); // sunt memorate
 
-         // clienti[i].AfisareClient();
+        // clienti[i].Afisare_Client();
 
     }
 

@@ -520,13 +520,32 @@ void Meniu_Principal(Client clienti[], int nr_clienti)
             int ok_inregistrare = 0;
             while (ok_inregistrare == 0)
             {
-                string cod;
-                char c1, c2, c3;
+                string cod_client_nou = { "000" };
 
                 cout << "Introduceti codul de client dorit (format din 3 majuscule): ";
-                cin >> c1>>c2>>c3;
+                cin >> cod_client_nou[0]>>cod_client_nou[1]>>cod_client_nou[2];
                 cout << endl;
+                if ((cod_client_nou[0] < 'A' || cod_client_nou[0] > 'Z') || (cod_client_nou[1] < 'A' || cod_client_nou[1] > 'Z') || (cod_client_nou[2] < 'A' || cod_client_nou[2] > 'Z'))
+                {
+                    cout << "Cod invalid. ";
+                }
+                else
+                {
+                    ok_inregistrare = 1;
+                    cout << "Introduceti numele dumneavoastra: ";
+                    string nume_client_nou;
+                    cin >> nume_client_nou;
+                    cout << endl;
+                    cout << "Introduceti prenumele dumneavoastra: ";
+                    string prenume_client_nou;
+                    cin >> prenume_client_nou;
+                    cout << endl;
 
+
+                    clienti[nr_clienti].Citire_Client(cod_client_nou, nume_client_nou, prenume_client_nou, 0, 0, 0, 0);
+                    nr_clienti++;
+                    cout << "Contul dumneavoastra a fost creat cu success." << endl << endl;
+                }
                 
             }
 
@@ -549,6 +568,11 @@ void Meniu_Principal(Client clienti[], int nr_clienti)
         {
             ok_optiune_princ = 1;
             system("cls");
+
+            for (int i = 0; i < nr_clienti; i++)
+            {
+                clienti[i].Afisare_Client();
+            }
 
             break;
         }
