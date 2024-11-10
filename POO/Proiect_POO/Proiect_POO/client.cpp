@@ -54,6 +54,11 @@ void Client::Afisare_Cod()
 	cout << this->cod_client;
 }
 
+void Client::Actualizare_Cod(std::string cod)
+{
+	this->cod_client = cod;
+}
+
 int Client::Status_Debit()
 {
 	return this->debit.status;

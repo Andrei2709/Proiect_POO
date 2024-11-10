@@ -13,6 +13,7 @@ public:
 	void Afisare_In_Fisier();
 	bool Verificare_Cod(std::string cod);
 	void Afisare_Cod();
+	void Actualizare_Cod(std::string cod);
 	int Status_Debit();
 	int Status_Credit();
 	void Actualizare_Status_Debit(int status);

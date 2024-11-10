@@ -101,7 +101,7 @@ void Meniu_Principal(Client clienti[], int nr_clienti)
                         int optiune_debit, ok_opt_debit = 0;
                         system("cls");
                         cout << "<Cont de debit> Selectati optiunea dorita:" << endl << endl;
-                        cout << "< 1 > Interogare sold" << endl << "< 2 > Retragere numerar" << endl << "< 3 > Depunere numerar" << endl << endl;
+                        cout << "< 1 > Interogare sold" << endl << "< 2 > Retragere numerar" << endl << "< 3 > Depunere numerar" << endl << "< 4 > Inchidere cont debit" << endl << endl;
                         cout << "Optiunea dumneavoastra: ";
                         cin >> optiune_debit;
                         cout << endl;
@@ -166,6 +166,24 @@ void Meniu_Principal(Client clienti[], int nr_clienti)
                                 cout << "Suma a fost depusa cu success." << endl << endl;
                                 clienti[client_activ].Actualizare_Suma_Debit(suma_debit + suma_depusa);
 
+                                break;
+                            }
+
+                            case 4:
+                            {
+                                system("cls");
+                                ok_opt_debit = 1;
+
+                                cout << "<Inchidere cont debit> Tastati 1 pentru a confirma." << endl << endl;
+                                cout << "Optiunea dumneavoastra: ";
+                                int opt_inchidere_debit;
+                                cin >> opt_inchidere_debit;
+                                cout << endl;
+                                if (opt_inchidere_debit == 1)
+                                {
+                                    clienti[client_activ].Actualizare_Status_Debit(0);
+                                    cout << "Contul de debit a fost inchis cu succes." << endl<<endl;
+                                }
                                 break;
                             }
 
@@ -250,7 +268,7 @@ void Meniu_Principal(Client clienti[], int nr_clienti)
                         int optiune_credit, ok_opt_credit = 0;
                         system("cls");
                         cout << "<Cont de credit> Selectati optiunea dorita:" << endl << endl;
-                        cout << "< 1 > Interogare suma datorata" << endl << "< 2 > Retragere numerar" << endl << "< 3 > Depunere numerar" <<endl<<"< 4 > Meniu data"<< endl << endl;
+                        cout << "< 1 > Interogare suma datorata" << endl << "< 2 > Retragere numerar" << endl << "< 3 > Depunere numerar" <<endl<<"< 4 > Meniu data"<< endl << "< 5 > Inchidere cont credit" << endl << endl;
                         cout << "Optiunea dumneavoastra: ";
                         cin >> optiune_credit;
                         cout << endl;
@@ -384,6 +402,41 @@ void Meniu_Principal(Client clienti[], int nr_clienti)
                                 break;
                             }
 
+                            case 5: // stergere cont credit
+                            {
+                                system("cls");
+                                ok_opt_credit = 1;
+
+
+                                if (clienti[client_activ].Status_Credit() == 1)
+                                {
+
+                                    if (clienti[client_activ].Afisare_Suma_Credit()==0)
+                                    {
+                                        cout << "<Inchidere cont credit> Tastati 1 pentru a confirma." << endl << endl;
+                                        cout << "Optiunea dumneavoastra: ";
+                                        int opt_inchidere_credit;
+                                        cin >> opt_inchidere_credit;
+                                        cout << endl;
+                                        if (opt_inchidere_credit == 1)
+                                        {
+                                            clienti[client_activ].Actualizare_Status_Credit(0);
+                                            cout << "Contul de credit a fost inchis cu succes." << endl << endl;
+                                        }
+                                    }
+                                    else
+                                    {
+                                        cout << "Achitati datoria pentru a putea efectua inchiderea." << endl << endl;
+                                    }
+                                }
+                                else
+                                {
+                                    cout << "Contul dumneavoastra de credit a fost blocat. Achitati datoria pentru a putea efectua inchiderea." << endl << endl;
+                                }
+
+                                break;
+                            }
+
                             default:
                             {
                                 cout << "Va rugam sa alegeti o optiune disponibila." << endl << endl;
@@ -472,10 +525,49 @@ void Meniu_Principal(Client clienti[], int nr_clienti)
                 {
                     ok_optiune = 1;
 
+                    int sters = 1;
+                    if (clienti[client_activ].Status_Debit() == 0 && clienti[client_activ].Status_Credit() == 0)
+                    {
+                        system("cls");
+                        cout << "Doriti sa inchideti definitiv contul? Tastati 1 in caz afirmativ."<<endl<<endl;
+                        cout << "Optiunea dumneavoastra: ";
+                        int opt_inchidere;
+                        cin >> opt_inchidere;
+                        if (opt_inchidere == 1)
+                        {
+                            clienti[client_activ].Actualizare_Cod("0000");
+                            cout << endl;
+                            cout << "Contul dumneavoastra a fost sters cu succes." << endl<< endl ;
 
+                            ok_optiune_princ = 0;
 
-                    if (Revenire_Meniu_Principal())
-                        ok_optiune = 0;
+                            system("cls");
+                            cout << "<Meniu principal> Selectati optiunea dorita:" << endl << endl;
+                            cout << "< 1 > Log-in" << endl << "< 2 > Inregistrare client nou" << endl << "< 3 > MENIU DATA" << endl << "< 4 > Inchidere program" << endl << endl;
+                            cout << "Optiunea dumneavoastra: ";
+                            cin >> optiune_princ;
+                            cout << endl;
+                        }
+
+                    }
+                    else
+                    {
+                        cout << "Pentru a putea sterge definitiv contul dumneavoastra trebuie sa inchideti initial conturile de credit si/sau debit." << endl << endl;
+
+                        if (Revenire_Meniu_Principal())
+                        {
+                            ok_optiune = 0;
+                            system("cls");
+                            cout << "<Meniu client> <Cod client: ";
+                            clienti[client_activ].Afisare_Cod();
+                            cout << "> Selectati optiunea dorita:" << endl << endl;
+                            cout << "< 1 > Informatii cont debit" << endl << "< 2 > Informatii cont credit" << endl << "< 3 > Informatii depozit" << endl;
+                            cout << "< 4 > Inchidere cont" << endl << "< 5 > Intoarcere la meniul principal" << endl << endl;
+                            cout << "Optiunea dumneavoastra: ";
+                            cin >> optiune;
+                            cout << endl;
+                        }
+                    }
 
                     break;
                 }
