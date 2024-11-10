@@ -8,7 +8,7 @@ class Client
 public:
 
 	Client();
-	void Citire_Client(std::string cod_client, std::string nume_client, std::string prenume_client, int status_debit, int suma_debit, int status_credit, int suma_credit);
+	void Citire_Client(std::string cod_client, std::string nume_client, std::string prenume_client, int status_debit, int suma_debit, int status_credit, int suma_credit, int suma_depozit);
 	void Afisare_Client();
 	void Afisare_In_Fisier();
 	bool Verificare_Cod(std::string cod);
@@ -20,8 +20,10 @@ public:
 	void Actualizare_Status_Credit(int status);
 	int Afisare_Suma_Debit();
 	int Afisare_Suma_Credit();
+	int Afisare_Suma_Depozit();
 	void Actualizare_Suma_Debit(int suma);
 	void Actualizare_Suma_Credit(int suma);
+	void Actualizare_Suma_Depozit(int suma);
 
 private:
 
@@ -48,6 +50,7 @@ private:
 	
 	Cont debit;
 	Cont credit;
+	int suma_depozit;
 
 };
 

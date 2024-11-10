@@ -1,4 +1,4 @@
 3
-ABCD Popescu Maria 1 284 -1 699
-CDAB Lautaru Cosmin 0 -1 1 29399
-DJAB Potecaru Cosmina 1 398 0 1112069
+ABCD Popescu Maria 1 284 -1 699 0
+CDAB Lautaru Cosmin 0 -1 1 29399 0
+DJAB Potecaru Cosmina 1 398 0 1112069 0
