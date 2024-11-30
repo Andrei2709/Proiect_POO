@@ -1,6 +1,7 @@
 #ifndef CLIENT_H
 #define CLIENT_H
 
+#include "cont.h"
 #include <string>
 
 class Client
@@ -30,24 +31,6 @@ private:
 	std::string cod_client;
 	std::string nume_client;
 	std::string prenume_client;
-
-	class Cont
-	{
-	private:
-		int status; // 0 - nu exista cont; 1 - exista cont; -1 - cont blocat
-		float suma;
-
-		friend class Client;
-
-	public:
-		Cont()
-		{
-			this->status = 0;
-			this->suma = -1;
-		}
-		Cont(int status) : status(status) {}
-		Cont(float suma) : suma(suma) {}
-	};
 	
 	Cont debit;
 	Cont credit;

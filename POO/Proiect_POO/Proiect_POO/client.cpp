@@ -10,10 +10,10 @@ Client::Client()
 	this->cod_client = -1;
 	this->nume_client = "";
 	this->prenume_client = "";
-	this->debit.status = 0;
-	this->debit.suma = -1;
-	this->credit.status = 0;
-	this->credit.suma = -1;
+	this->debit.Actualizare_Status(0);
+	this->debit.Actualizare_Suma(-1);
+	this->credit.Actualizare_Status(0);
+	this->credit.Actualizare_Suma(-1);
 	this->suma_depozit = 0;
 }
 
@@ -22,10 +22,10 @@ void Client::Citire_Client(std::string cod_client, std::string nume_client, std:
 	this->cod_client = cod_client;
 	this->nume_client = nume_client;
 	this->prenume_client = prenume_client;
-	this->debit.status = status_debit;
-	this->debit.suma = suma_debit;
-	this->credit.status = status_credit;
-	this->credit.suma = suma_credit;
+	this->debit.Actualizare_Status(status_debit);
+	this->debit.Actualizare_Suma(suma_debit);
+	this->credit.Actualizare_Status(status_credit);
+	this->credit.Actualizare_Suma(suma_credit);
 	this->suma_depozit = suma_depozit;
 }
 
@@ -34,26 +34,26 @@ void Client::Afisare_Client()
 	cout << "Cod client: " << cod_client << endl;
 	cout << "Nume client: " << nume_client << " " << prenume_client << endl;
 	cout << "Informatii cont debit: ";
-	if (debit.status)
+	if (debit.Afisare_Status())
 	{
 		cout << "exista, suma de ";
-		cout << debit.suma << " lei." << endl;
+		cout << debit.Afisare_Suma() << " lei." << endl;
 	}
 	else
 		cout << "nu exista."<<endl;
 
 	cout << "Informatii cont credit: ";
-	if (credit.status==1)
+	if (credit.Afisare_Status()==1)
 	{
 		cout << "exista, datoreaza suma de ";
-		cout << credit.suma << " lei." << endl;
+		cout << credit.Afisare_Suma() << " lei." << endl;
 	}
 	else
 	{
-		if (credit.status == -1)
+		if (credit.Afisare_Status() == -1)
 		{
 			cout << "blocat, datoreaza suma de ";
-			cout << credit.suma << " lei." << endl;
+			cout << credit.Afisare_Suma() << " lei." << endl;
 		}
 		else
 		{
@@ -71,7 +71,7 @@ void Client::Afisare_In_Fisier()
 	ofstream of;
 	of.open("clienti.txt", std::ios::app);
 
-	of << cod_client << " " << nume_client << " " << prenume_client << " " << debit.status << " " << debit.suma << " " << credit.status << " " << credit.suma<< " "<<suma_depozit;
+	of << cod_client << " " << nume_client << " " << prenume_client << " " << debit.Afisare_Status() << " " << debit.Afisare_Suma() << " " << credit.Afisare_Status() << " " << credit.Afisare_Suma() << " "<<suma_depozit;
 	of << endl;
 }
 
@@ -94,32 +94,32 @@ void Client::Actualizare_Cod(std::string cod)
 
 int Client::Status_Debit()
 {
-	return this->debit.status;
+	return this->debit.Afisare_Status();
 }
 
 int Client::Status_Credit()
 {
-	return this->credit.status;
+	return this->credit.Afisare_Status();
 }
 
 void Client::Actualizare_Status_Debit(int status)
 {
-	this->debit.status = status;
+	this->debit.Actualizare_Status(status);
 }
 
 void Client::Actualizare_Status_Credit(int status)
 {
-	this->credit.status = status;
+	this->credit.Actualizare_Status(status);
 }
 
 float Client::Afisare_Suma_Debit()
 {
-	return this->debit.suma;
+	return this->debit.Afisare_Suma();
 }
 
 float Client::Afisare_Suma_Credit()
 {
-	return this->credit.suma;
+	return this->credit.Afisare_Suma();
 }
 
 float Client::Afisare_Suma_Depozit()
@@ -129,12 +129,12 @@ float Client::Afisare_Suma_Depozit()
 
 void Client::Actualizare_Suma_Debit(float suma)
 {
-	this->debit.suma = suma;
+	this->debit.Actualizare_Suma(suma);
 }
 
 void Client::Actualizare_Suma_Credit(float suma)
 {
-	this->credit.suma = suma;
+	this->credit.Actualizare_Suma(suma);
 }
 
 void Client::Actualizare_Suma_Depozit(float suma)

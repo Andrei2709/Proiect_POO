@@ -128,11 +128,13 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="client.cpp" />
+    <ClCompile Include="cont.cpp" />
     <ClCompile Include="meniu.cpp" />
     <ClCompile Include="Proiect_POO.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="client.h" />
+    <ClInclude Include="cont.h" />
     <ClInclude Include="meniu.h" />
   </ItemGroup>
   <ItemGroup>

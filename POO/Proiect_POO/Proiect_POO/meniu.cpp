@@ -29,6 +29,482 @@ bool Revenire_Meniu_Principal()
     }
 }
 
+void Submeniu_Debit(Client clienti[], int nr_clienti, int client_activ)
+{
+    if (clienti[client_activ].Status_Debit())
+    {
+        int optiune_debit, ok_opt_debit = 0;
+        system("cls");
+        cout << "<Cont de debit> Selectati optiunea dorita:" << endl << endl;
+        cout << "< 1 > Interogare sold" << endl << "< 2 > Retragere numerar" << endl << "< 3 > Depunere numerar" << endl << "< 4 > Inchidere cont debit" << endl << endl;
+        cout << "Optiunea dumneavoastra: ";
+        cin >> optiune_debit;
+        cout << endl;
+
+        while (ok_opt_debit == 0)
+        {
+
+            switch (optiune_debit)
+            {
+            case 1:
+            {
+                system("cls");
+                ok_opt_debit = 1;
+
+                cout << "Suma din contul dumneavoastra de debit este de ";
+                float suma_debit = clienti[client_activ].Afisare_Suma_Debit();
+                cout << suma_debit << " lei." << endl << endl;
+
+                break;
+            }
+
+            case 2:
+            {
+                system("cls");
+                ok_opt_debit = 1;
+
+                float suma_debit = clienti[client_activ].Afisare_Suma_Debit();
+
+                float suma_retrasa = 0;
+                while (suma_retrasa<1 || suma_retrasa>suma_debit)
+                {
+                    cout << "Introduceti suma pe care doriti sa o retrageti: ";
+                    cin >> suma_retrasa;
+                    cout << endl;
+                    if (suma_retrasa > 0 && suma_retrasa <= suma_debit)
+                        break;
+                    cout << "Introduceti o suma valida." << endl << endl;
+                }
+                cout << "Suma a fost retrasa cu success." << endl << endl;
+                clienti[client_activ].Actualizare_Suma_Debit(suma_debit - suma_retrasa);
+
+                break;
+            }
+
+            case 3:
+            {
+                system("cls");
+                ok_opt_debit = 1;
+
+                float suma_debit = clienti[client_activ].Afisare_Suma_Debit();
+
+                float suma_depusa = 0;
+                while (suma_depusa < 1)
+                {
+                    cout << "Introduceti suma pe care doriti sa o depuneti: ";
+                    cin >> suma_depusa;
+                    cout << endl;
+                    if (suma_depusa > 0)
+                        break;
+                    cout << "Introduceti o suma valida." << endl << endl;
+                }
+                cout << "Suma a fost depusa cu success." << endl << endl;
+                clienti[client_activ].Actualizare_Suma_Debit(suma_debit + suma_depusa);
+
+                break;
+            }
+
+            case 4:
+            {
+                system("cls");
+                ok_opt_debit = 1;
+
+                cout << "<Inchidere cont debit> Tastati 1 pentru a confirma." << endl << endl;
+                cout << "Optiunea dumneavoastra: ";
+                int opt_inchidere_debit;
+                cin >> opt_inchidere_debit;
+                cout << endl;
+                if (opt_inchidere_debit == 1)
+                {
+                    clienti[client_activ].Actualizare_Status_Debit(0);
+                    cout << "Contul de debit a fost inchis cu succes." << endl << endl;
+                }
+                break;
+            }
+
+            default:
+            {
+                cout << "Va rugam sa alegeti o optiune disponibila." << endl << endl;
+                cout << "Optiunea dumneavoastra: ";
+                cin >> optiune_debit;
+                cout << endl;
+            }
+
+            }
+        }
+
+    }
+    else
+    {
+        system("cls");
+        cout << "Nu exista un cont de debit asociat contului dumneavoastra. Doriti sa creati unul?" << endl << endl;
+        cout << "< 1 > Da" << endl << "< 2 > Nu" << endl << endl;
+        cout << "Optiunea dumneavoastra: ";
+        int optiune_creare_debit, ok_opt_cr_deb = 0;
+        cin >> optiune_creare_debit;
+        cout << endl;
+
+        while (ok_opt_cr_deb == 0)
+        {
+            switch (optiune_creare_debit)
+            {
+            case 1:
+            {
+                ok_opt_cr_deb = 1;
+
+                clienti[client_activ].Actualizare_Status_Debit(1);
+                clienti[client_activ].Actualizare_Suma_Debit(0);
+                cout << "Contul de debit a fost creat cu success" << endl << endl;
+
+                break;
+            }
+
+            case 2:
+            {
+                ok_opt_cr_deb = 1;
+                break;
+            }
+
+            default:
+            {
+                cout << "Va rugam sa alegeti o optiune disponibila." << endl << endl;
+                cout << "Optiunea dumneavoastra: ";
+                cin >> optiune_creare_debit;
+                cout << endl;
+            }
+
+            }
+        }
+
+    }
+}
+
+void Submeniu_Credit(Client clienti[], int nr_clienti, int client_activ)
+{
+    if (clienti[client_activ].Status_Credit())
+    {
+        int optiune_credit, ok_opt_credit = 0;
+        system("cls");
+        cout << "<Cont de credit> Selectati optiunea dorita:" << endl << endl;
+        cout << "< 1 > Interogare suma datorata" << endl << "< 2 > Retragere numerar" << endl << "< 3 > Depunere numerar" << endl << "< 4 > Meniu data" << endl << "< 5 > Inchidere cont credit" << endl << endl;
+        cout << "Optiunea dumneavoastra: ";
+        cin >> optiune_credit;
+        cout << endl;
+
+        while (ok_opt_credit == 0)
+        {
+
+            switch (optiune_credit)
+            {
+            case 1: // suma datorata
+            {
+                system("cls");
+                ok_opt_credit = 1;
+
+                float suma_credit = clienti[client_activ].Afisare_Suma_Credit();
+
+                if (suma_credit != 0 && clienti[client_activ].Status_Credit() == 1)
+                {
+                    cout << "Suma datorata este de ";
+                    cout << suma_credit << " lei. Aceasta trebuie platita in maxim 6 luni." << endl << endl;
+                }
+                else
+                {
+                    if (suma_credit != 0 && clienti[client_activ].Status_Credit() == -1)
+                    {
+                        cout << "Contul dumneavoastra a fost blocat pentru neachitarea datoriei. Va rugam achitati suma datorata de ";
+                        cout << suma_credit;
+                        cout << " lei pentru deblocare." << endl << endl;
+                    }
+                    else
+                    {
+                        cout << "Nu aveti nicio datorie." << endl << endl;
+                    }
+                }
+
+                break;
+            }
+
+            case 2: // retragere cu comision 5%
+            {
+                system("cls");
+                ok_opt_credit = 1;
+
+                float suma_credit = clienti[client_activ].Afisare_Suma_Credit();
+
+                if (clienti[client_activ].Status_Credit() == 1)
+                {
+                    float suma_retrasa = 0;
+                    while (suma_retrasa < 1 || suma_retrasa>1000000)
+                    {
+                        cout << "Introduceti suma pe care doriti sa o retrageti (maxim 1.000.000 lei): ";
+                        cin >> suma_retrasa;
+                        cout << endl;
+                        if (suma_retrasa > 0 && suma_retrasa <= 1000000)
+                            break;
+                        cout << "Introduceti o suma valida." << endl << endl;
+                    }
+                    cout << "Suma a fost retrasa cu success." << endl << endl;
+                    clienti[client_activ].Actualizare_Suma_Credit(suma_credit + 1.05 * suma_retrasa);
+                }
+                else
+                {
+                    cout << "Contul dumneavoastra a fost blocat pentru neachitarea datoriei." << endl << endl;
+                }
+
+                break;
+            }
+
+            case 3: // depunere 
+            {
+                system("cls");
+                ok_opt_credit = 1;
+
+                float suma_credit = clienti[client_activ].Afisare_Suma_Credit();
+
+                if (suma_credit == 0)
+                {
+                    cout << "Nu trebuie sa achitati nicio datorie." << endl << endl;
+                    break;
+                }
+
+                float suma_depusa = 0;
+                while (suma_depusa < 1 || suma_depusa > suma_credit)
+                {
+                    cout << "Introduceti suma pe care doriti sa o depuneti: ";
+                    cin >> suma_depusa;
+                    cout << endl;
+                    if (suma_depusa > 0 && suma_depusa <= suma_credit)
+                        break;
+                    cout << "Introduceti o suma valida." << endl << endl;
+                }
+
+                clienti[client_activ].Actualizare_Suma_Credit(suma_credit - suma_depusa);
+
+                if (clienti[client_activ].Status_Credit() == 1)
+                {
+                    cout << "Suma a fost depusa cu success." << endl << endl;
+                }
+                else
+                {
+                    if (clienti[client_activ].Afisare_Suma_Credit() == 0)
+                    {
+                        cout << "Suma a fost depusa cu success. Contul dumneavoastra a fost deblocat" << endl << endl;
+                        clienti[client_activ].Actualizare_Status_Credit(1);
+                    }
+
+                }
+
+                break;
+            }
+
+            case 4: // meniu data
+            {
+                system("cls");
+                ok_opt_credit = 1;
+
+                cout << "<Meniu data> Doriti sa treaca 6 luni? Tastati 1 pentru cazul afirmativ." << endl << endl;
+                cout << "Optiunea dumneavoastra: ";
+                int opt_data;
+                cin >> opt_data;
+
+                if (opt_data == 1)
+                {
+                    float suma_credit = clienti[client_activ].Afisare_Suma_Credit();
+                    if (suma_credit != 0 && clienti[client_activ].Status_Credit() == 1)
+                    {
+                        clienti[client_activ].Actualizare_Status_Credit(-1);
+                    }
+                }
+                cout << endl;
+                break;
+            }
+
+            case 5: // stergere cont credit
+            {
+                system("cls");
+                ok_opt_credit = 1;
+
+
+                if (clienti[client_activ].Status_Credit() == 1)
+                {
+
+                    if (clienti[client_activ].Afisare_Suma_Credit() == 0)
+                    {
+                        cout << "<Inchidere cont credit> Tastati 1 pentru a confirma." << endl << endl;
+                        cout << "Optiunea dumneavoastra: ";
+                        int opt_inchidere_credit;
+                        cin >> opt_inchidere_credit;
+                        cout << endl;
+                        if (opt_inchidere_credit == 1)
+                        {
+                            clienti[client_activ].Actualizare_Status_Credit(0);
+                            cout << "Contul de credit a fost inchis cu succes." << endl << endl;
+                        }
+                    }
+                    else
+                    {
+                        cout << "Achitati datoria pentru a putea efectua inchiderea." << endl << endl;
+                    }
+                }
+                else
+                {
+                    cout << "Contul dumneavoastra de credit a fost blocat. Achitati datoria pentru a putea efectua inchiderea." << endl << endl;
+                }
+
+                break;
+            }
+
+            default:
+            {
+                cout << "Va rugam sa alegeti o optiune disponibila." << endl << endl;
+                cout << "Optiunea dumneavoastra: ";
+                cin >> optiune_credit;
+                cout << endl;
+            }
+
+            }
+        }
+
+    }
+    else
+    {
+        system("cls");
+        cout << "Nu exista un cont de credit asociat contului dumneavoastra. Doriti sa creati unul?" << endl << endl;
+        cout << "< 1 > Da" << endl << "< 2 > Nu" << endl << endl;
+        cout << "Optiunea dumneavoastra: ";
+        int optiune_creare_credit, ok_opt_cr_cred = 0;
+        cin >> optiune_creare_credit;
+        cout << endl;
+
+        while (ok_opt_cr_cred == 0)
+        {
+            switch (optiune_creare_credit)
+            {
+            case 1:
+            {
+                ok_opt_cr_cred = 1;
+
+                clienti[client_activ].Actualizare_Status_Credit(1);
+                clienti[client_activ].Actualizare_Suma_Credit(0);
+                cout << "Contul de credit a fost creat cu success" << endl << endl;
+
+                break;
+            }
+
+            case 2:
+            {
+                ok_opt_cr_cred = 1;
+                break;
+            }
+
+            default:
+            {
+                cout << "Va rugam sa alegeti o optiune disponibila." << endl << endl;
+                cout << "Optiunea dumneavoastra: ";
+                cin >> optiune_creare_credit;
+                cout << endl;
+            }
+
+            }
+        }
+
+    }
+}
+
+void Submeniu_Depozit(Client clienti[], int nr_clienti, int client_activ)
+{
+    if (clienti[client_activ].Status_Debit() == 1)
+    {
+        int optiune_depozit, ok_opt_depozit = 0;
+        system("cls");
+        cout << "<Depozit cu dobanda fixa 5%/an> Selectati optiunea dorita:" << endl << endl;
+        cout << "< 1 > Depunere" << endl << "< 2 > Meniu data" << endl << endl;
+        cout << "Optiunea dumneavoastra: ";
+        cin >> optiune_depozit;
+        cout << endl;
+
+        while (ok_opt_depozit == 0)
+        {
+
+            switch (optiune_depozit)
+            {
+
+            case 1: // depunere 
+            {
+                system("cls");
+                ok_opt_depozit = 1;
+
+                float suma_debit = clienti[client_activ].Afisare_Suma_Debit();
+                float suma_depozit = clienti[client_activ].Afisare_Suma_Depozit();
+
+                if (suma_debit == 0)
+                {
+                    cout << "Soldul contului dumneavoastra de debit este nul. Nu puteti efectua un depozit." << endl << endl;
+                    break;
+                }
+
+                float suma_depusa = 0;
+                while (suma_depusa < 1 || suma_depusa > suma_debit)
+                {
+                    cout << "Introduceti suma pe care doriti sa o depuneti: ";
+                    cin >> suma_depusa;
+                    cout << endl;
+                    if (suma_depusa > 0 && suma_depusa <= suma_debit)
+                        break;
+                    cout << "Introduceti o suma valida." << endl << endl;
+                }
+
+                clienti[client_activ].Actualizare_Suma_Depozit(suma_depozit + suma_depusa);
+                clienti[client_activ].Actualizare_Suma_Debit(suma_debit - suma_depusa);
+                cout << "Suma a fost depusa cu success." << endl << endl;
+
+
+                break;
+            }
+
+            case 2: // meniu data
+            {
+                system("cls");
+                ok_opt_depozit = 1;
+
+                cout << "<Meniu data> Doriti sa treaca un an? Tastati 1 pentru cazul afirmativ." << endl << endl;
+                cout << "Optiunea dumneavoastra: ";
+                int opt_data;
+                cin >> opt_data;
+
+                if (opt_data == 1)
+                {
+                    cout << endl;
+                    float suma_debit = clienti[client_activ].Afisare_Suma_Debit();
+                    float suma_depozit = clienti[client_activ].Afisare_Suma_Depozit();
+                    clienti[client_activ].Actualizare_Suma_Debit(suma_debit + 1.05 * suma_depozit);
+                    clienti[client_activ].Actualizare_Suma_Depozit(0);
+                    cout << "Depozitul dumneavoastra a generat ";
+                    cout << 0.05 * suma_depozit << " de lei care au fost adaugati in contul de debit." << endl;
+                }
+                cout << endl;
+                break;
+            }
+
+
+            default:
+            {
+                cout << "Va rugam sa alegeti o optiune disponibila." << endl << endl;
+                cout << "Optiunea dumneavoastra: ";
+                cin >> optiune_depozit;
+                cout << endl;
+            }
+
+            }
+        }
+
+    }
+    else
+    {
+        cout << "Pentru a putea accesa depozitul cu dobanda fixa trebuie sa aveti un cont de debit." << endl << endl;
+    }
+}
 
 void Meniu_Principal(Client clienti[], int nr_clienti)
 {
@@ -97,152 +573,7 @@ void Meniu_Principal(Client clienti[], int nr_clienti)
                 {
                     ok_optiune = 1;
                     
-                    if (clienti[client_activ].Status_Debit())
-                    {
-                        int optiune_debit, ok_opt_debit = 0;
-                        system("cls");
-                        cout << "<Cont de debit> Selectati optiunea dorita:" << endl << endl;
-                        cout << "< 1 > Interogare sold" << endl << "< 2 > Retragere numerar" << endl << "< 3 > Depunere numerar" << endl << "< 4 > Inchidere cont debit" << endl << endl;
-                        cout << "Optiunea dumneavoastra: ";
-                        cin >> optiune_debit;
-                        cout << endl;
-
-                        while (ok_opt_debit == 0)
-                        {   
-
-                            switch (optiune_debit)
-                            {
-                            case 1:
-                            {
-                                system("cls");
-                                ok_opt_debit = 1;
-
-                                cout << "Suma din contul dumneavoastra de debit este de ";
-                                float suma_debit = clienti[client_activ].Afisare_Suma_Debit();
-                                cout <<suma_debit<< " lei."<<endl<<endl;
-
-                                break;
-                            }
-                            
-                            case 2:
-                            {
-                                system("cls");
-                                ok_opt_debit = 1;
-
-                                float suma_debit = clienti[client_activ].Afisare_Suma_Debit();
-
-                                float suma_retrasa=0;
-                                while (suma_retrasa<1 || suma_retrasa>suma_debit)
-                                {
-                                    cout << "Introduceti suma pe care doriti sa o retrageti: ";
-                                    cin >> suma_retrasa;
-                                    cout << endl;
-                                    if (suma_retrasa>0 && suma_retrasa<=suma_debit)
-                                        break;
-                                    cout << "Introduceti o suma valida." << endl << endl;
-                                }
-                                cout << "Suma a fost retrasa cu success."<<endl<<endl;
-                                clienti[client_activ].Actualizare_Suma_Debit(suma_debit - suma_retrasa);
-
-                                break;
-                            }
-
-                            case 3:
-                            {
-                                system("cls");
-                                ok_opt_debit = 1;
-
-                                float suma_debit = clienti[client_activ].Afisare_Suma_Debit();
-
-                                float suma_depusa = 0;
-                                while (suma_depusa < 1)
-                                {
-                                    cout << "Introduceti suma pe care doriti sa o depuneti: ";
-                                    cin >> suma_depusa;
-                                    cout << endl;
-                                    if (suma_depusa > 0)
-                                        break;
-                                    cout << "Introduceti o suma valida." << endl << endl;
-                                }
-                                cout << "Suma a fost depusa cu success." << endl << endl;
-                                clienti[client_activ].Actualizare_Suma_Debit(suma_debit + suma_depusa);
-
-                                break;
-                            }
-
-                            case 4:
-                            {
-                                system("cls");
-                                ok_opt_debit = 1;
-
-                                cout << "<Inchidere cont debit> Tastati 1 pentru a confirma." << endl << endl;
-                                cout << "Optiunea dumneavoastra: ";
-                                int opt_inchidere_debit;
-                                cin >> opt_inchidere_debit;
-                                cout << endl;
-                                if (opt_inchidere_debit == 1)
-                                {
-                                    clienti[client_activ].Actualizare_Status_Debit(0);
-                                    cout << "Contul de debit a fost inchis cu succes." << endl<<endl;
-                                }
-                                break;
-                            }
-
-                            default:
-                            {
-                                cout << "Va rugam sa alegeti o optiune disponibila." << endl << endl;
-                                cout << "Optiunea dumneavoastra: ";
-                                cin >> optiune_debit;
-                                cout << endl;
-                            }
-
-                            }
-                        }
-
-                    }
-                    else
-                    {
-                        system("cls");
-                        cout << "Nu exista un cont de debit asociat contului dumneavoastra. Doriti sa creati unul?" << endl<<endl;
-                        cout << "< 1 > Da" << endl << "< 2 > Nu" << endl<<endl;
-                        cout << "Optiunea dumneavoastra: ";
-                        int optiune_creare_debit, ok_opt_cr_deb=0;
-                        cin >> optiune_creare_debit;
-                        cout << endl;
-
-                        while (ok_opt_cr_deb == 0)
-                        {
-                            switch (optiune_creare_debit)
-                            {
-                            case 1:
-                            {
-                                ok_opt_cr_deb = 1;
-
-                                clienti[client_activ].Actualizare_Status_Debit(1);
-                                clienti[client_activ].Actualizare_Suma_Debit(0);
-                                cout << "Contul de debit a fost creat cu success" << endl<<endl;
-
-                                break;
-                            }
-
-                            case 2:
-                            {
-                                ok_opt_cr_deb = 1;
-                                break;
-                            }
-
-                            default:
-                            {
-                                cout << "Va rugam sa alegeti o optiune disponibila." << endl << endl;
-                                cout << "Optiunea dumneavoastra: ";
-                                cin >> optiune_creare_debit;
-                                cout << endl;
-                            }
-
-                            }
-                        }
-                        
-                    }
+                    Submeniu_Debit(clienti, nr_clienti,client_activ);
                     
                     if (Revenire_Meniu_Principal())
                     {
@@ -264,235 +595,7 @@ void Meniu_Principal(Client clienti[], int nr_clienti)
                 {
                     ok_optiune = 1;
 
-                    if (clienti[client_activ].Status_Credit())
-                    {
-                        int optiune_credit, ok_opt_credit = 0;
-                        system("cls");
-                        cout << "<Cont de credit> Selectati optiunea dorita:" << endl << endl;
-                        cout << "< 1 > Interogare suma datorata" << endl << "< 2 > Retragere numerar" << endl << "< 3 > Depunere numerar" <<endl<<"< 4 > Meniu data"<< endl << "< 5 > Inchidere cont credit" << endl << endl;
-                        cout << "Optiunea dumneavoastra: ";
-                        cin >> optiune_credit;
-                        cout << endl;
-
-                        while (ok_opt_credit == 0)
-                        {
-
-                            switch (optiune_credit)
-                            {
-                            case 1: // suma datorata
-                            {
-                                system("cls");
-                                ok_opt_credit = 1;
-
-                                float suma_credit = clienti[client_activ].Afisare_Suma_Credit();
-
-                                if (suma_credit != 0 && clienti[client_activ].Status_Credit() == 1)
-                                {
-                                    cout << "Suma datorata este de ";
-                                    cout << suma_credit << " lei. Aceasta trebuie platita in maxim 6 luni." << endl << endl;
-                                }
-                                else
-                                {
-                                    if (suma_credit != 0 && clienti[client_activ].Status_Credit() == -1)
-                                    {
-                                        cout << "Contul dumneavoastra a fost blocat pentru neachitarea datoriei. Va rugam achitati suma datorata de ";
-                                        cout << suma_credit;
-                                        cout << " lei pentru deblocare." << endl << endl;
-                                    }
-                                    else
-                                    {
-                                        cout << "Nu aveti nicio datorie." << endl << endl;
-                                    }
-                                }
-
-                                break;
-                            }
-
-                            case 2: // retragere cu comision 5%
-                            {
-                                system("cls");
-                                ok_opt_credit = 1;
-
-                                float suma_credit = clienti[client_activ].Afisare_Suma_Credit();
-
-                                if (clienti[client_activ].Status_Credit() == 1)
-                                {
-                                    float suma_retrasa = 0;
-                                    while (suma_retrasa < 1 || suma_retrasa>1000000)
-                                    {
-                                        cout << "Introduceti suma pe care doriti sa o retrageti (maxim 1.000.000 lei): ";
-                                        cin >> suma_retrasa;
-                                        cout << endl;
-                                        if (suma_retrasa > 0 && suma_retrasa <= 1000000)
-                                            break;
-                                        cout << "Introduceti o suma valida." << endl << endl;
-                                    }
-                                    cout << "Suma a fost retrasa cu success." << endl << endl;
-                                    clienti[client_activ].Actualizare_Suma_Credit(suma_credit + 1.05 * suma_retrasa);
-                                }
-                                else
-                                {
-                                    cout << "Contul dumneavoastra a fost blocat pentru neachitarea datoriei." << endl << endl;
-                                }
-
-                                break;
-                            }
-
-                            case 3: // depunere 
-                            {
-                                system("cls");
-                                ok_opt_credit = 1;
-
-                                float suma_credit = clienti[client_activ].Afisare_Suma_Credit();
-
-                                if (suma_credit == 0)
-                                {
-                                    cout << "Nu trebuie sa achitati nicio datorie." << endl << endl;
-                                    break;
-                                }
-
-                                float suma_depusa = 0;
-                                while (suma_depusa < 1 || suma_depusa > suma_credit)
-                                {
-                                    cout << "Introduceti suma pe care doriti sa o depuneti: ";
-                                    cin >> suma_depusa;
-                                    cout << endl;
-                                    if (suma_depusa > 0 && suma_depusa <= suma_credit)
-                                        break;
-                                    cout << "Introduceti o suma valida." << endl << endl;
-                                }
-
-                                clienti[client_activ].Actualizare_Suma_Credit(suma_credit - suma_depusa);
-
-                                if (clienti[client_activ].Status_Credit() == 1)
-                                {
-                                    cout << "Suma a fost depusa cu success." << endl << endl;
-                                }
-                                else
-                                {
-                                    if (clienti[client_activ].Afisare_Suma_Credit() == 0)
-                                    {
-                                        cout << "Suma a fost depusa cu success. Contul dumneavoastra a fost deblocat" << endl << endl;
-                                        clienti[client_activ].Actualizare_Status_Credit(1);
-                                    }
-
-                                }
-
-                                break;
-                            }
-
-                            case 4: // meniu data
-                            {
-                                system("cls");
-                                ok_opt_credit = 1;
-
-                                cout << "<Meniu data> Doriti sa treaca 6 luni? Tastati 1 pentru cazul afirmativ." << endl<<endl;
-                                cout << "Optiunea dumneavoastra: ";
-                                int opt_data;
-                                cin >> opt_data;
-
-                                if (opt_data == 1)
-                                {
-                                    float suma_credit = clienti[client_activ].Afisare_Suma_Credit();
-                                    if (suma_credit != 0 && clienti[client_activ].Status_Credit() == 1)
-                                    {
-                                        clienti[client_activ].Actualizare_Status_Credit(-1);
-                                    }
-                                }
-                                cout << endl;
-                                break;
-                            }
-
-                            case 5: // stergere cont credit
-                            {
-                                system("cls");
-                                ok_opt_credit = 1;
-
-
-                                if (clienti[client_activ].Status_Credit() == 1)
-                                {
-
-                                    if (clienti[client_activ].Afisare_Suma_Credit()==0)
-                                    {
-                                        cout << "<Inchidere cont credit> Tastati 1 pentru a confirma." << endl << endl;
-                                        cout << "Optiunea dumneavoastra: ";
-                                        int opt_inchidere_credit;
-                                        cin >> opt_inchidere_credit;
-                                        cout << endl;
-                                        if (opt_inchidere_credit == 1)
-                                        {
-                                            clienti[client_activ].Actualizare_Status_Credit(0);
-                                            cout << "Contul de credit a fost inchis cu succes." << endl << endl;
-                                        }
-                                    }
-                                    else
-                                    {
-                                        cout << "Achitati datoria pentru a putea efectua inchiderea." << endl << endl;
-                                    }
-                                }
-                                else
-                                {
-                                    cout << "Contul dumneavoastra de credit a fost blocat. Achitati datoria pentru a putea efectua inchiderea." << endl << endl;
-                                }
-
-                                break;
-                            }
-
-                            default:
-                            {
-                                cout << "Va rugam sa alegeti o optiune disponibila." << endl << endl;
-                                cout << "Optiunea dumneavoastra: ";
-                                cin >> optiune_credit;
-                                cout << endl;
-                            }
-
-                            }
-                        }
-
-                    }
-                    else
-                    {
-                        system("cls");
-                        cout << "Nu exista un cont de credit asociat contului dumneavoastra. Doriti sa creati unul?" << endl << endl;
-                        cout << "< 1 > Da" << endl << "< 2 > Nu" << endl << endl;
-                        cout << "Optiunea dumneavoastra: ";
-                        int optiune_creare_credit, ok_opt_cr_cred = 0;
-                        cin >> optiune_creare_credit;
-                        cout << endl;
-
-                        while (ok_opt_cr_cred== 0)
-                        {
-                            switch (optiune_creare_credit)
-                            {
-                            case 1:
-                            {
-                                ok_opt_cr_cred = 1;
-
-                                clienti[client_activ].Actualizare_Status_Credit(1);
-                                clienti[client_activ].Actualizare_Suma_Credit(0);
-                                cout << "Contul de credit a fost creat cu success" << endl << endl;
-
-                                break;
-                            }
-
-                            case 2:
-                            {
-                                ok_opt_cr_cred = 1;
-                                break;
-                            }
-
-                            default:
-                            {
-                                cout << "Va rugam sa alegeti o optiune disponibila." << endl << endl;
-                                cout << "Optiunea dumneavoastra: ";
-                                cin >> optiune_creare_credit;
-                                cout << endl;
-                            }
-
-                            }
-                        }
-
-                    }
+                    Submeniu_Credit(clienti, nr_clienti, client_activ);
 
                     if (Revenire_Meniu_Principal())
                     {
@@ -515,96 +618,7 @@ void Meniu_Principal(Client clienti[], int nr_clienti)
                 {
                     ok_optiune = 1;
 
-                    if (clienti[client_activ].Status_Debit()==1)
-                    {
-                        int optiune_depozit, ok_opt_depozit = 0;
-                        system("cls");
-                        cout << "<Depozit cu dobanda fixa 5%/an> Selectati optiunea dorita:" << endl << endl;
-                        cout << "< 1 > Depunere" << endl << "< 2 > Meniu data" << endl << endl;
-                        cout << "Optiunea dumneavoastra: ";
-                        cin >> optiune_depozit;
-                        cout << endl;
-
-                        while (ok_opt_depozit == 0)
-                        {
-
-                            switch (optiune_depozit)
-                            {
-
-                            case 1: // depunere 
-                            {
-                                system("cls");
-                                ok_opt_depozit = 1;
-
-                                float suma_debit = clienti[client_activ].Afisare_Suma_Debit();
-                                float suma_depozit = clienti[client_activ].Afisare_Suma_Depozit();
-
-                                if (suma_debit == 0)
-                                {
-                                    cout << "Soldul contului dumneavoastra de debit este nul. Nu puteti efectua un depozit." << endl << endl;
-                                    break;
-                                }
-
-                                float suma_depusa = 0;
-                                while (suma_depusa < 1 || suma_depusa > suma_debit)
-                                {
-                                    cout << "Introduceti suma pe care doriti sa o depuneti: ";
-                                    cin >> suma_depusa;
-                                    cout << endl;
-                                    if (suma_depusa > 0 && suma_depusa <= suma_debit)
-                                        break;
-                                    cout << "Introduceti o suma valida." << endl << endl;
-                                }
-
-                                clienti[client_activ].Actualizare_Suma_Depozit(suma_depozit + suma_depusa);
-                                clienti[client_activ].Actualizare_Suma_Debit(suma_debit - suma_depusa);
-                                cout << "Suma a fost depusa cu success." << endl << endl;
-
-
-                                break;
-                            }
-
-                            case 2: // meniu data
-                            {
-                                system("cls");
-                                ok_opt_depozit = 1;
-
-                                cout << "<Meniu data> Doriti sa treaca un an? Tastati 1 pentru cazul afirmativ." << endl << endl;
-                                cout << "Optiunea dumneavoastra: ";
-                                int opt_data;
-                                cin >> opt_data;
-
-                                if (opt_data == 1)
-                                {
-                                    cout << endl;
-                                    float suma_debit = clienti[client_activ].Afisare_Suma_Debit();
-                                    float suma_depozit = clienti[client_activ].Afisare_Suma_Depozit();
-                                    clienti[client_activ].Actualizare_Suma_Debit(suma_debit + 1.05 * suma_depozit);
-                                    clienti[client_activ].Actualizare_Suma_Depozit(0);
-                                    cout << "Depozitul dumneavoastra a generat ";
-                                    cout << 0.05 * suma_depozit << " de lei care au fost adaugati in contul de debit." << endl;
-                                }
-                                cout << endl;
-                                break;
-                            }
-
-
-                            default:
-                            {
-                                cout << "Va rugam sa alegeti o optiune disponibila." << endl << endl;
-                                cout << "Optiunea dumneavoastra: ";
-                                cin >> optiune_depozit;
-                                cout << endl;
-                            }
-
-                            }
-                        }
-
-                    }
-                    else
-                    {
-                        cout << "Pentru a putea accesa depozitul cu dobanda fixa trebuie sa aveti un cont de debit." << endl << endl;
-                    }
+                    Submeniu_Depozit(clienti, nr_clienti, client_activ);
 
                     if (Revenire_Meniu_Principal())
                     {

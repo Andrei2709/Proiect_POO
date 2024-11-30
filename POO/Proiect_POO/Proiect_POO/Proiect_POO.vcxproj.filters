@@ -24,6 +24,9 @@
     <ClCompile Include="meniu.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="cont.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="client.h">
@@ -31,6 +34,9 @@
     </ClInclude>
     <ClInclude Include="meniu.h">
       <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="cont.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
