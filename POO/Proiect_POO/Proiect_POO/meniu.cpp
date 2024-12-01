@@ -29,6 +29,37 @@ bool Revenire_Meniu_Principal()
     }
 }
 
+int Submeniu_Login(Client clienti[], int nr_clienti)
+{
+    int ok_login = 0, client_activ;
+    while (ok_login == 0)
+    {
+        string cod,parola;
+        cout << "Introduceti codul de client: ";
+        cin >> cod;
+        cout << endl;
+        cout << "Introduceti parola: ";
+        cin >> parola;
+        cout << endl;
+        client_activ = 0;
+        while (client_activ < nr_clienti) // verificare combinatie cod+parola
+        {
+            if (clienti[client_activ].Verificare_Login(cod,parola))
+            {
+                ok_login = 1;
+            }
+            if (ok_login)
+                break;
+            client_activ++;
+        }
+        if (ok_login)
+            break;
+        cout << "Combinatia codului de client si a parolei nu se potrivesc. Va rugam sa reincercati." << endl << endl;
+    }
+
+    return client_activ;
+}
+
 void Submeniu_Debit(Client clienti[], int nr_clienti, int client_activ)
 {
     if (clienti[client_activ].Status_Debit())
@@ -417,8 +448,9 @@ void Submeniu_Depozit(Client clienti[], int nr_clienti, int client_activ)
     if (clienti[client_activ].Status_Debit() == 1)
     {
         int optiune_depozit, ok_opt_depozit = 0;
+        float suma_depozit = clienti[client_activ].Afisare_Suma_Depozit();
         system("cls");
-        cout << "<Depozit cu dobanda fixa 5%/an> Selectati optiunea dorita:" << endl << endl;
+        cout << "<Depozit cu dobanda fixa 5%/an> Suma depozitata: "<<suma_depozit<<" lei. Selectati optiunea dorita : " << endl << endl;
         cout << "< 1 > Depunere" << endl << "< 2 > Meniu data" << endl << endl;
         cout << "Optiunea dumneavoastra: ";
         cin >> optiune_depozit;
@@ -506,6 +538,60 @@ void Submeniu_Depozit(Client clienti[], int nr_clienti, int client_activ)
     }
 }
 
+int Submeniu_Inregistrare(Client clienti[], int nr_clienti)
+{
+    int ok_inregistrare = 0;
+    while (ok_inregistrare == 0)
+    {
+        string cod_client_nou;
+
+        cout << "Introduceti codul de client dorit (format din 4 majuscule): ";
+        cin >> cod_client_nou;
+        cout << endl;
+
+        int ok_cod_nou = 1;
+        for (int i = 0; i < nr_clienti; i++)
+        {
+            if (clienti[i].Verificare_Cod(cod_client_nou) || cod_client_nou.length() != 4)
+            {
+                ok_cod_nou = 0;
+                break;
+            }
+
+        }
+
+        if (ok_cod_nou == 0 || (cod_client_nou[0] < 'A' || cod_client_nou[0] > 'Z') || (cod_client_nou[1] < 'A' || cod_client_nou[1] > 'Z') || (cod_client_nou[2] < 'A' || cod_client_nou[2] > 'Z') || (cod_client_nou[3] < 'A' || cod_client_nou[3] > 'Z'))
+        {
+            cout << "Cod invalid sau deja exista. ";
+        }
+        else
+        {
+            ok_inregistrare = 1;
+
+            cout << "Introduceti o parola pentru contul dumneavoastra: ";
+            string parola_client_nou;
+            cin >> parola_client_nou;
+            cout << endl;
+            cout << "Introduceti numele dumneavoastra: ";
+            string nume_client_nou;
+            cin >> nume_client_nou;
+            cout << endl;
+            cout << "Introduceti prenumele dumneavoastra: ";
+            string prenume_client_nou;
+            cin >> prenume_client_nou;
+            cout << endl;
+
+
+            clienti[nr_clienti].Citire_Client(cod_client_nou, parola_client_nou, nume_client_nou, prenume_client_nou, 0, 0, 0, 0, 0);
+            nr_clienti++;
+            cout << "Contul dumneavoastra a fost creat cu success." << endl << endl;
+        }
+
+    }
+
+    return nr_clienti;
+}
+
 void Meniu_Principal(Client clienti[], int nr_clienti)
 {
     int optiune_princ,ok_optiune_princ = 0;
@@ -528,28 +614,7 @@ void Meniu_Principal(Client clienti[], int nr_clienti)
             ok_optiune_princ = 1;
             system("cls");
 
-            int ok_login = 0,client_activ;
-            while (ok_login == 0)
-            {
-                string cod;
-                cout << "Introduceti codul de client: ";
-                cin >> cod;
-                cout << endl;
-                client_activ = 0;
-                while (client_activ < nr_clienti) // verificare cod
-                {
-                    if (clienti[client_activ].Verificare_Cod(cod))
-                    {
-                        ok_login = 1;
-                    }
-                    if (ok_login)
-                        break;
-                    client_activ++;
-                }
-                if (ok_login)
-                    break;
-                cout << "Codul de client nu a fost gasit. Va rugam sa reincercati." << endl<<endl;
-            }
+            int client_activ = Submeniu_Login(clienti, nr_clienti); // functie login
 
             int optiune, ok_optiune = 0;
 
@@ -573,7 +638,7 @@ void Meniu_Principal(Client clienti[], int nr_clienti)
                 {
                     ok_optiune = 1;
                     
-                    Submeniu_Debit(clienti, nr_clienti,client_activ);
+                    Submeniu_Debit(clienti, nr_clienti,client_activ); // functie cont debit
                     
                     if (Revenire_Meniu_Principal())
                     {
@@ -595,7 +660,7 @@ void Meniu_Principal(Client clienti[], int nr_clienti)
                 {
                     ok_optiune = 1;
 
-                    Submeniu_Credit(clienti, nr_clienti, client_activ);
+                    Submeniu_Credit(clienti, nr_clienti, client_activ); // functie cont credit
 
                     if (Revenire_Meniu_Principal())
                     {
@@ -618,7 +683,7 @@ void Meniu_Principal(Client clienti[], int nr_clienti)
                 {
                     ok_optiune = 1;
 
-                    Submeniu_Depozit(clienti, nr_clienti, client_activ);
+                    Submeniu_Depozit(clienti, nr_clienti, client_activ); // functie depozit
 
                     if (Revenire_Meniu_Principal())
                     {
@@ -733,50 +798,7 @@ void Meniu_Principal(Client clienti[], int nr_clienti)
 
             cout << "<Meniu inregistrare client nou>" << endl << endl;
 
-            int ok_inregistrare = 0;
-            while (ok_inregistrare == 0)
-            {
-                string cod_client_nou = { "0000" };
-
-                cout << "Introduceti codul de client dorit (format din 4 majuscule): ";
-                cin >> cod_client_nou[0]>>cod_client_nou[1]>>cod_client_nou[2]>>cod_client_nou[3];
-                cout << endl;
-
-                int ok_cod_nou = 1;
-                for (int i = 0; i < nr_clienti; i++)
-                {
-                    if (clienti[i].Verificare_Cod(cod_client_nou))
-                    {
-                        ok_cod_nou = 0;
-                        break;
-                    }
-         
-                }
-
-                if (ok_cod_nou==0 || (cod_client_nou[0] < 'A' || cod_client_nou[0] > 'Z') || (cod_client_nou[1] < 'A' || cod_client_nou[1] > 'Z') || (cod_client_nou[2] < 'A' || cod_client_nou[2] > 'Z') || (cod_client_nou[3] < 'A' || cod_client_nou[3] > 'Z'))
-                {
-                    cout << "Cod invalid sau deja exista. ";
-                }
-                else
-                {
-                    ok_inregistrare = 1;
-                    cout << "Introduceti numele dumneavoastra: ";
-                    string nume_client_nou;
-                    cin >> nume_client_nou;
-                    cout << endl;
-                    cout << "Introduceti prenumele dumneavoastra: ";
-                    string prenume_client_nou;
-                    cin >> prenume_client_nou;
-                    cout << endl;
-
-
-                    clienti[nr_clienti].Citire_Client(cod_client_nou, nume_client_nou, prenume_client_nou, 0, 0, 0, 0, 0);
-                    nr_clienti++;
-                    cout << "Contul dumneavoastra a fost creat cu success." << endl << endl;
-                }
-                
-            }
-
+            nr_clienti = Submeniu_Inregistrare(clienti, nr_clienti);
 
             if (Revenire_Meniu_Principal())
             {
@@ -797,10 +819,9 @@ void Meniu_Principal(Client clienti[], int nr_clienti)
             ok_optiune_princ = 1;
             system("cls");
 
-            for (int i = 0; i < nr_clienti; i++)
-            {
-                clienti[i].Afisare_Client();
-            }
+            Administrator administrator;
+
+            administrator.Lista_Clienti(administrator, clienti, nr_clienti); // afisare lista clienti
 
             if (Revenire_Meniu_Principal())
             {

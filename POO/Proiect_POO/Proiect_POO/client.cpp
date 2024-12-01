@@ -8,25 +8,28 @@ using namespace std;
 Client::Client()
 {
 	this->cod_client = -1;
+	this->parola = "";
 	this->nume_client = "";
 	this->prenume_client = "";
 	this->debit.Actualizare_Status(0);
 	this->debit.Actualizare_Suma(-1);
 	this->credit.Actualizare_Status(0);
 	this->credit.Actualizare_Suma(-1);
-	this->suma_depozit = 0;
+	this->depozit.Actualizare_Status(1);
+	this->depozit.Actualizare_Suma(0);
 }
 
-void Client::Citire_Client(std::string cod_client, std::string nume_client, std::string prenume_client, int status_debit, float suma_debit, int status_credit, float suma_credit, float suma_depozit)
+void Client::Citire_Client(std::string cod_client, std::string parola, std::string nume_client, std::string prenume_client, int status_debit, float suma_debit, int status_credit, float suma_credit, float suma_depozit)
 {
 	this->cod_client = cod_client;
+	this->parola = parola;
 	this->nume_client = nume_client;
 	this->prenume_client = prenume_client;
 	this->debit.Actualizare_Status(status_debit);
 	this->debit.Actualizare_Suma(suma_debit);
 	this->credit.Actualizare_Status(status_credit);
 	this->credit.Actualizare_Suma(suma_credit);
-	this->suma_depozit = suma_depozit;
+	this->depozit.Actualizare_Suma(suma_depozit);
 }
 
 void Client::Afisare_Client()
@@ -61,7 +64,7 @@ void Client::Afisare_Client()
 		}
 	}
 
-	cout << "Informatii depozit dobanda fixa: suma de "<<suma_depozit<<" lei."<<endl<<endl;
+	cout << "Informatii depozit dobanda fixa: suma de "<<depozit.Afisare_Suma()<<" lei."<<endl<<endl;
 
 
 }
@@ -71,13 +74,20 @@ void Client::Afisare_In_Fisier()
 	ofstream of;
 	of.open("clienti.txt", std::ios::app);
 
-	of << cod_client << " " << nume_client << " " << prenume_client << " " << debit.Afisare_Status() << " " << debit.Afisare_Suma() << " " << credit.Afisare_Status() << " " << credit.Afisare_Suma() << " "<<suma_depozit;
+	of << cod_client << " " << parola << " " << nume_client << " " << prenume_client << " " << debit.Afisare_Status() << " " << debit.Afisare_Suma() << " " << credit.Afisare_Status() << " " << credit.Afisare_Suma() << " " << depozit.Afisare_Suma();
 	of << endl;
+}
+
+bool Client::Verificare_Login(string cod, string parola)
+{
+	if (cod==this->cod_client && parola==this->parola)
+		return true;
+	return false;
 }
 
 bool Client::Verificare_Cod(string cod)
 {
-	if (cod==this->cod_client)
+	if (cod == this->cod_client)
 		return true;
 	return false;
 }
@@ -124,7 +134,7 @@ float Client::Afisare_Suma_Credit()
 
 float Client::Afisare_Suma_Depozit()
 {
-	return this->suma_depozit;
+	return this->depozit.Afisare_Suma();
 }
 
 void Client::Actualizare_Suma_Debit(float suma)
@@ -139,5 +149,28 @@ void Client::Actualizare_Suma_Credit(float suma)
 
 void Client::Actualizare_Suma_Depozit(float suma)
 {
-	this->suma_depozit = suma;
+	this->depozit.Actualizare_Suma(suma);
+}
+
+void Administrator::Lista_Clienti(Administrator administrator, Client clienti[], int nr_clienti)
+{
+	string parola;
+	cout << "Introduceti parola: ";
+	cin >> parola;
+	cout << endl;
+
+	if(administrator.Verificare_Login("ADMIN",parola))
+	for (int i = 0; i < nr_clienti; i++)
+	{
+		clienti[i].Afisare_Client();
+	}
+	else
+	{
+		cout << "Parola incorecta. ";
+	}
+}
+
+Administrator::Administrator()
+{
+	Citire_Client("ADMIN", "parola_admin", "", "", 0, 0, 0, 0, 0);
 }
