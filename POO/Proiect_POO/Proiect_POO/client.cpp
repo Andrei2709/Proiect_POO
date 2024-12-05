@@ -152,6 +152,11 @@ void Client::Actualizare_Suma_Depozit(float suma)
 	this->depozit.Actualizare_Suma(suma);
 }
 
+Administrator::Administrator()
+{
+	Citire_Client("ADMIN", "parola_admin", "", "", 0, 0, 0, 0, 0);
+}
+
 void Administrator::Lista_Clienti(Administrator administrator, Client clienti[], int nr_clienti)
 {
 	string parola;
@@ -170,7 +175,14 @@ void Administrator::Lista_Clienti(Administrator administrator, Client clienti[],
 	}
 }
 
-Administrator::Administrator()
+void Administrator::Salvare_Date(Client clienti[], int nr_clienti, int utilizatori_stersi)
 {
-	Citire_Client("ADMIN", "parola_admin", "", "", 0, 0, 0, 0, 0);
+	ofstream fout("clienti.txt");
+	fout << nr_clienti - utilizatori_stersi << endl;
+
+	for (int i = 0; i < nr_clienti; i++)
+	{
+		if (clienti[i].Verificare_Cod("0000") == 0)
+			clienti[i].Afisare_In_Fisier();
+	}
 }

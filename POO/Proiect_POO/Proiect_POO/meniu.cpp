@@ -596,6 +596,7 @@ void Meniu_Principal(Client clienti[], int nr_clienti)
 {
     int optiune_princ,ok_optiune_princ = 0;
     int utilizatori_stersi = 0;
+    Administrator administrator;
 
     system("cls");
     cout << "<Meniu principal> Selectati optiunea dorita:" << endl << endl;
@@ -785,7 +786,6 @@ void Meniu_Principal(Client clienti[], int nr_clienti)
 
                 }
 
-
             }
 
             break;
@@ -818,8 +818,6 @@ void Meniu_Principal(Client clienti[], int nr_clienti)
         {
             ok_optiune_princ = 1;
             system("cls");
-
-            Administrator administrator;
 
             administrator.Lista_Clienti(administrator, clienti, nr_clienti); // afisare lista clienti
 
@@ -859,14 +857,8 @@ void Meniu_Principal(Client clienti[], int nr_clienti)
     }
 
    // scriere in fisier 
-   ofstream fout("clienti.txt");
-   fout << nr_clienti-utilizatori_stersi << endl;
 
-    for (int i = 0; i < nr_clienti; i++)
-    {
-        if(clienti[i].Verificare_Cod("0000")==0)
-        clienti[i].Afisare_In_Fisier();
-    }
-
+    administrator.Salvare_Date(clienti, nr_clienti, utilizatori_stersi);
+   
 }
 
