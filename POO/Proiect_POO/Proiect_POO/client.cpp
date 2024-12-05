@@ -19,7 +19,7 @@ Client::Client()
 	this->depozit.Actualizare_Suma(0);
 }
 
-void Client::Citire_Client(std::string cod_client, std::string parola, std::string nume_client, std::string prenume_client, int status_debit, float suma_debit, int status_credit, float suma_credit, float suma_depozit)
+void Client::Citire_Client(string cod_client, string parola, string nume_client, string prenume_client, int status_debit, float suma_debit, int status_credit, float suma_credit, float suma_depozit)
 {
 	this->cod_client = cod_client;
 	this->parola = parola;
@@ -102,55 +102,53 @@ void Client::Actualizare_Cod(std::string cod)
 	this->cod_client = cod;
 }
 
-int Client::Status_Debit()
+int Client::Status_Cont(string tip_cont)
 {
-	return this->debit.Afisare_Status();
+	if (tip_cont == "debit")
+		return this->debit.Afisare_Status();
+
+	if (tip_cont == "credit")
+		return this->credit.Afisare_Status();
+
+	return -1;
 }
 
-int Client::Status_Credit()
+void Client::Actualizare_Status_Cont(string tip_cont, int status)
 {
-	return this->credit.Afisare_Status();
+	if (tip_cont == "debit")
+		this->debit.Actualizare_Status(status);
+
+	if (tip_cont == "credit")
+		this->credit.Actualizare_Status(status);
 }
 
-void Client::Actualizare_Status_Debit(int status)
+float Client::Afisare_Suma_Cont(string tip_cont)
 {
-	this->debit.Actualizare_Status(status);
+	if (tip_cont == "debit")
+		return this->debit.Afisare_Suma();
+
+	if (tip_cont == "credit")
+		return this->credit.Afisare_Suma();
+
+	if(tip_cont == "depozit")
+		return this->depozit.Afisare_Suma();
+
+	return -1;
 }
 
-void Client::Actualizare_Status_Credit(int status)
+void Client::Actualizare_Suma_Cont(string tip_cont, float suma)
 {
-	this->credit.Actualizare_Status(status);
+	if (tip_cont == "debit")
+		this->debit.Actualizare_Suma(suma);
+
+	if (tip_cont == "credit")
+		this->credit.Actualizare_Suma(suma);
+
+	if (tip_cont == "depozit")
+		this->depozit.Actualizare_Suma(suma);
 }
 
-float Client::Afisare_Suma_Debit()
-{
-	return this->debit.Afisare_Suma();
-}
-
-float Client::Afisare_Suma_Credit()
-{
-	return this->credit.Afisare_Suma();
-}
-
-float Client::Afisare_Suma_Depozit()
-{
-	return this->depozit.Afisare_Suma();
-}
-
-void Client::Actualizare_Suma_Debit(float suma)
-{
-	this->debit.Actualizare_Suma(suma);
-}
-
-void Client::Actualizare_Suma_Credit(float suma)
-{
-	this->credit.Actualizare_Suma(suma);
-}
-
-void Client::Actualizare_Suma_Depozit(float suma)
-{
-	this->depozit.Actualizare_Suma(suma);
-}
+//administrator
 
 Administrator::Administrator()
 {

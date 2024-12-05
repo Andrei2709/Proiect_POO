@@ -16,16 +16,10 @@ public:
 	bool Verificare_Cod(std::string cod);
 	void Afisare_Cod();
 	void Actualizare_Cod(std::string cod);
-	int Status_Debit();
-	int Status_Credit();
-	void Actualizare_Status_Debit(int status);
-	void Actualizare_Status_Credit(int status);
-	float Afisare_Suma_Debit();
-	float Afisare_Suma_Credit();
-	float Afisare_Suma_Depozit();
-	void Actualizare_Suma_Debit(float suma);
-	void Actualizare_Suma_Credit(float suma);
-	void Actualizare_Suma_Depozit(float suma);
+	int Status_Cont(std::string tip_cont);
+	void Actualizare_Status_Cont(std::string tip_cont, int status);
+	float Afisare_Suma_Cont(std::string tip_cont);
+	void Actualizare_Suma_Cont(std::string tip_cont, float suma);
 
 private:
 
