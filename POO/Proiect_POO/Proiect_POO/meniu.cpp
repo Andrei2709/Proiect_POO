@@ -183,7 +183,7 @@ void Submeniu_Debit(Client clienti[], int nr_clienti, int client_activ)
             {
                 ok_opt_cr_deb = 1;
 
-                clienti[client_activ].Actualizare_Status_Cont("debit", 0);
+                clienti[client_activ].Actualizare_Status_Cont("debit", 1);
                 clienti[client_activ].Actualizare_Suma_Cont("debit",0);
                 cout << "Contul de debit a fost creat cu success" << endl << endl;
 
@@ -458,7 +458,6 @@ void Submeniu_Depozit(Client clienti[], int nr_clienti, int client_activ)
 
         while (ok_opt_depozit == 0)
         {
-
             switch (optiune_depozit)
             {
 
@@ -518,7 +517,6 @@ void Submeniu_Depozit(Client clienti[], int nr_clienti, int client_activ)
                 cout << endl;
                 break;
             }
-
 
             default:
             {
@@ -785,7 +783,6 @@ void Meniu_Principal(Client clienti[], int nr_clienti)
                 }
 
                 }
-
             }
 
             break;
@@ -859,6 +856,6 @@ void Meniu_Principal(Client clienti[], int nr_clienti)
    // scriere in fisier 
 
     administrator.Salvare_Date(clienti, nr_clienti, utilizatori_stersi);
-   
+
 }
 

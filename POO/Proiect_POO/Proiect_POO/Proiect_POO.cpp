@@ -33,7 +33,6 @@ int main()
    //fout << nr_clienti << endl;
 
     Meniu_Principal(clienti,nr_clienti);
-
     
     return 0;
 }

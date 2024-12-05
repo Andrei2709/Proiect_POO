@@ -66,7 +66,6 @@ void Client::Afisare_Client()
 
 	cout << "Informatii depozit dobanda fixa: suma de "<<depozit.Afisare_Suma()<<" lei."<<endl<<endl;
 
-
 }
 
 void Client::Afisare_In_Fisier()
