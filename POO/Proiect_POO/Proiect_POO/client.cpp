@@ -91,9 +91,12 @@ bool Client::Verificare_Cod(string cod)
 	return false;
 }
 
-void Client::Afisare_Cod()
+void Client::Afisare_Cod_Si_Nume()
 {
-	cout << this->cod_client;
+	cout << "<Meniu client> <Cod client: ";
+	cout << this->cod_client << ">"<<endl<<endl;
+	cout << "Buna ziua, " << this->nume_client << " " << this->prenume_client << "! ";
+	cout << "Selectati optiunea dorita: "<<endl<<endl;
 }
 
 void Client::Actualizare_Cod(std::string cod)
@@ -147,39 +150,3 @@ void Client::Actualizare_Suma_Cont(string tip_cont, float suma)
 		this->depozit.Actualizare_Suma(suma);
 }
 
-//administrator
-
-Administrator::Administrator()
-{
-	Citire_Client("ADMIN", "parola_admin", "", "", 0, 0, 0, 0, 0);
-}
-
-void Administrator::Lista_Clienti(Administrator administrator, Client clienti[], int nr_clienti)
-{
-	string parola;
-	cout << "Introduceti parola: ";
-	cin >> parola;
-	cout << endl;
-
-	if(administrator.Verificare_Login("ADMIN",parola))
-	for (int i = 0; i < nr_clienti; i++)
-	{
-		clienti[i].Afisare_Client();
-	}
-	else
-	{
-		cout << "Parola incorecta. ";
-	}
-}
-
-void Administrator::Salvare_Date(Client clienti[], int nr_clienti, int utilizatori_stersi)
-{
-	ofstream fout("clienti.txt");
-	fout << nr_clienti - utilizatori_stersi << endl;
-
-	for (int i = 0; i < nr_clienti; i++)
-	{
-		if (clienti[i].Verificare_Cod("0000") == 0)
-			clienti[i].Afisare_In_Fisier();
-	}
-}

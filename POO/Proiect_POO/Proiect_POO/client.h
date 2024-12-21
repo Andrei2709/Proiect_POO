@@ -14,7 +14,7 @@ public:
 	void Afisare_Client();
 	bool Verificare_Login(std::string cod, std::string parola);
 	bool Verificare_Cod(std::string cod);
-	void Afisare_Cod();
+	void Afisare_Cod_Si_Nume();
 	void Actualizare_Cod(std::string cod);
 	int Status_Cont(std::string tip_cont);
 	void Actualizare_Status_Cont(std::string tip_cont, int status);
@@ -31,18 +31,6 @@ private:
 	Cont debit;
 	Cont credit;
 	Cont depozit;
-
-};
-
-class Administrator : protected Client
-{
-public:
-
-	Administrator();
-	void Lista_Clienti(Administrator administrator, Client clienti[], int nr_clienti);
-	void Salvare_Date(Client clienti[], int nr_clienti, int utilizatori_stersi);
-
-private:
 
 };
 

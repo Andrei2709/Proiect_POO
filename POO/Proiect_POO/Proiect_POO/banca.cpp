@@ -1,13 +1,34 @@
 #include <iostream>
 #include <fstream>
-#include <string>
-#include "client.h"
+#include "banca.h"
 
 using namespace std;
 
-bool Revenire_Meniu_Principal()
+void Banca::Citire_Lista_Clienti()
 {
-    cout << "Doriti sa reveniti la meniul principal?" << endl<<endl;
+    ifstream fin("clienti.txt"); // system("cls");
+    fin >> this->nr_clienti; // numarul de clienti
+
+    string cod_client = "";
+    string parola = "";
+    string nume_client = "";
+    string prenume_client = "";
+    int status_debit = 0;
+    float suma_debit = 0;
+    int status_credit = 0;
+    float suma_credit = 0;
+    float suma_depozit = 0;
+
+    for (int i = 0; i < nr_clienti; i++)
+    {
+        fin >> cod_client >> parola >> nume_client >> prenume_client >> status_debit >> suma_debit >> status_credit >> suma_credit >> suma_depozit; // detaliile fiecarui client
+        clienti[i].Citire_Client(cod_client, parola, nume_client, prenume_client, status_debit, suma_debit, status_credit, suma_credit, suma_depozit); // sunt memorate
+    }
+}
+
+bool Banca::Revenire_Meniu_Principal()
+{
+    cout << "Doriti sa reveniti la meniul principal?" << endl << endl;
     cout << "< 1 > Da" << endl << "< 2 > Nu" << endl << endl;
     cout << "Optiunea dumneavoastra: ";
     int raspuns;
@@ -29,40 +50,67 @@ bool Revenire_Meniu_Principal()
     }
 }
 
-int Submeniu_Login(Client clienti[], int nr_clienti)
+int Banca::Revenire_Meniu_Principal_Text(string tip_meniu)
 {
-    int ok_login = 0, client_activ;
+    int optiune;
+
+    if (tip_meniu == "meniu_client")
+    {
+        system("cls");
+        clienti[this->client_activ].Afisare_Cod_Si_Nume();
+        cout << "< 1 > Informatii cont debit" << endl << "< 2 > Informatii cont credit" << endl << "< 3 > Informatii depozit" << endl;
+        cout << "< 4 > Inchidere cont" << endl << "< 5 > Intoarcere la meniul principal" << endl << endl;
+        cout << "Optiunea dumneavoastra: ";
+        cin >> optiune;
+        cout << endl;
+    }
+
+    if (tip_meniu == "meniu_principal")
+    {
+        system("cls");
+        cout << "<Meniu principal> Selectati optiunea dorita:" << endl << endl;
+        cout << "< 1 > Log-in" << endl << "< 2 > Inregistrare client nou" << endl << "< 3 > Administrator" << endl << "< 4 > Inchidere program" << endl << endl;
+        cout << "Optiunea dumneavoastra: ";
+        cin >> optiune;
+        cout << endl;
+    }
+
+    return optiune;
+}
+
+void Banca::Submeniu_Login()
+{
+    int ok_login = 0;
+    this->client_activ = 0;
     while (ok_login == 0)
     {
-        string cod,parola;
+        string cod, parola;
         cout << "Introduceti codul de client: ";
         cin >> cod;
         cout << endl;
         cout << "Introduceti parola: ";
         cin >> parola;
         cout << endl;
-        client_activ = 0;
-        while (client_activ < nr_clienti) // verificare combinatie cod+parola
+        this->client_activ = 0;
+        while (this->client_activ < nr_clienti) // verificare combinatie cod+parola
         {
-            if (clienti[client_activ].Verificare_Login(cod,parola))
+            if (clienti[this->client_activ].Verificare_Login(cod, parola))
             {
                 ok_login = 1;
             }
             if (ok_login)
                 break;
-            client_activ++;
+            this->client_activ++;
         }
         if (ok_login)
             break;
         cout << "Combinatia codului de client si a parolei nu se potrivesc. Va rugam sa reincercati." << endl << endl;
     }
-
-    return client_activ;
 }
 
-void Submeniu_Debit(Client clienti[], int nr_clienti, int client_activ)
+void Banca::Submeniu_Debit()
 {
-    if (clienti[client_activ].Status_Cont("debit"))
+    if (clienti[this->client_activ].Status_Cont("debit"))
     {
         int optiune_debit, ok_opt_debit = 0;
         system("cls");
@@ -83,7 +131,7 @@ void Submeniu_Debit(Client clienti[], int nr_clienti, int client_activ)
                 ok_opt_debit = 1;
 
                 cout << "Suma din contul dumneavoastra de debit este de ";
-                float suma_debit = clienti[client_activ].Afisare_Suma_Cont("debit");
+                float suma_debit = clienti[this->client_activ].Afisare_Suma_Cont("debit");
                 cout << suma_debit << " lei." << endl << endl;
 
                 break;
@@ -94,7 +142,7 @@ void Submeniu_Debit(Client clienti[], int nr_clienti, int client_activ)
                 system("cls");
                 ok_opt_debit = 1;
 
-                float suma_debit = clienti[client_activ].Afisare_Suma_Cont("debit");
+                float suma_debit = clienti[this->client_activ].Afisare_Suma_Cont("debit");
 
                 float suma_retrasa = 0;
                 while (suma_retrasa<1 || suma_retrasa>suma_debit)
@@ -107,7 +155,7 @@ void Submeniu_Debit(Client clienti[], int nr_clienti, int client_activ)
                     cout << "Introduceti o suma valida." << endl << endl;
                 }
                 cout << "Suma a fost retrasa cu success." << endl << endl;
-                clienti[client_activ].Actualizare_Suma_Cont("debit",suma_debit - suma_retrasa);
+                clienti[this->client_activ].Actualizare_Suma_Cont("debit", suma_debit - suma_retrasa);
 
                 break;
             }
@@ -117,7 +165,7 @@ void Submeniu_Debit(Client clienti[], int nr_clienti, int client_activ)
                 system("cls");
                 ok_opt_debit = 1;
 
-                float suma_debit = clienti[client_activ].Afisare_Suma_Cont("debit");
+                float suma_debit = clienti[this->client_activ].Afisare_Suma_Cont("debit");
 
                 float suma_depusa = 0;
                 while (suma_depusa < 1)
@@ -130,7 +178,7 @@ void Submeniu_Debit(Client clienti[], int nr_clienti, int client_activ)
                     cout << "Introduceti o suma valida." << endl << endl;
                 }
                 cout << "Suma a fost depusa cu success." << endl << endl;
-                clienti[client_activ].Actualizare_Suma_Cont("debit",suma_debit + suma_depusa);
+                clienti[this->client_activ].Actualizare_Suma_Cont("debit", suma_debit + suma_depusa);
 
                 break;
             }
@@ -147,7 +195,7 @@ void Submeniu_Debit(Client clienti[], int nr_clienti, int client_activ)
                 cout << endl;
                 if (opt_inchidere_debit == 1)
                 {
-                    clienti[client_activ].Actualizare_Status_Cont("debit", 0);
+                    clienti[this->client_activ].Actualizare_Status_Cont("debit", 0);
                     cout << "Contul de debit a fost inchis cu succes." << endl << endl;
                 }
                 break;
@@ -183,8 +231,8 @@ void Submeniu_Debit(Client clienti[], int nr_clienti, int client_activ)
             {
                 ok_opt_cr_deb = 1;
 
-                clienti[client_activ].Actualizare_Status_Cont("debit", 1);
-                clienti[client_activ].Actualizare_Suma_Cont("debit",0);
+                clienti[this->client_activ].Actualizare_Status_Cont("debit", 1);
+                clienti[this->client_activ].Actualizare_Suma_Cont("debit", 0);
                 cout << "Contul de debit a fost creat cu success" << endl << endl;
 
                 break;
@@ -210,9 +258,9 @@ void Submeniu_Debit(Client clienti[], int nr_clienti, int client_activ)
     }
 }
 
-void Submeniu_Credit(Client clienti[], int nr_clienti, int client_activ)
+void Banca::Submeniu_Credit()
 {
-    if (clienti[client_activ].Status_Cont("credit"))
+    if (clienti[this->client_activ].Status_Cont("credit"))
     {
         int optiune_credit, ok_opt_credit = 0;
         system("cls");
@@ -232,16 +280,16 @@ void Submeniu_Credit(Client clienti[], int nr_clienti, int client_activ)
                 system("cls");
                 ok_opt_credit = 1;
 
-                float suma_credit = clienti[client_activ].Afisare_Suma_Cont("credit");
+                float suma_credit = clienti[this->client_activ].Afisare_Suma_Cont("credit");
 
-                if (suma_credit != 0 && clienti[client_activ].Status_Cont("credit") == 1)
+                if (suma_credit != 0 && clienti[this->client_activ].Status_Cont("credit") == 1)
                 {
                     cout << "Suma datorata este de ";
                     cout << suma_credit << " lei. Aceasta trebuie platita in maxim 6 luni." << endl << endl;
                 }
                 else
                 {
-                    if (suma_credit != 0 && clienti[client_activ].Status_Cont("credit") == -1)
+                    if (suma_credit != 0 && clienti[this->client_activ].Status_Cont("credit") == -1)
                     {
                         cout << "Contul dumneavoastra a fost blocat pentru neachitarea datoriei. Va rugam achitati suma datorata de ";
                         cout << suma_credit;
@@ -261,9 +309,9 @@ void Submeniu_Credit(Client clienti[], int nr_clienti, int client_activ)
                 system("cls");
                 ok_opt_credit = 1;
 
-                float suma_credit = clienti[client_activ].Afisare_Suma_Cont("credit");
+                float suma_credit = clienti[this->client_activ].Afisare_Suma_Cont("credit");
 
-                if (clienti[client_activ].Status_Cont("credit") == 1)
+                if (clienti[this->client_activ].Status_Cont("credit") == 1)
                 {
                     float suma_retrasa = 0;
                     while (suma_retrasa < 1 || suma_retrasa>1000000)
@@ -276,7 +324,7 @@ void Submeniu_Credit(Client clienti[], int nr_clienti, int client_activ)
                         cout << "Introduceti o suma valida." << endl << endl;
                     }
                     cout << "Suma a fost retrasa cu success." << endl << endl;
-                    clienti[client_activ].Actualizare_Suma_Cont("credit",suma_credit + 1.05f * suma_retrasa);
+                    clienti[this->client_activ].Actualizare_Suma_Cont("credit", suma_credit + 1.05f * suma_retrasa);
                 }
                 else
                 {
@@ -291,7 +339,7 @@ void Submeniu_Credit(Client clienti[], int nr_clienti, int client_activ)
                 system("cls");
                 ok_opt_credit = 1;
 
-                float suma_credit = clienti[client_activ].Afisare_Suma_Cont("credit");
+                float suma_credit = clienti[this->client_activ].Afisare_Suma_Cont("credit");
 
                 if (suma_credit == 0)
                 {
@@ -310,18 +358,18 @@ void Submeniu_Credit(Client clienti[], int nr_clienti, int client_activ)
                     cout << "Introduceti o suma valida." << endl << endl;
                 }
 
-                clienti[client_activ].Actualizare_Suma_Cont("credit",suma_credit - suma_depusa);
+                clienti[this->client_activ].Actualizare_Suma_Cont("credit", suma_credit - suma_depusa);
 
-                if (clienti[client_activ].Status_Cont("credit") == 1)
+                if (clienti[this->client_activ].Status_Cont("credit") == 1)
                 {
                     cout << "Suma a fost depusa cu success." << endl << endl;
                 }
                 else
                 {
-                    if (clienti[client_activ].Afisare_Suma_Cont("credit") == 0)
+                    if (clienti[this->client_activ].Afisare_Suma_Cont("credit") == 0)
                     {
                         cout << "Suma a fost depusa cu success. Contul dumneavoastra a fost deblocat" << endl << endl;
-                        clienti[client_activ].Actualizare_Status_Cont("credit",1);
+                        clienti[this->client_activ].Actualizare_Status_Cont("credit", 1);
                     }
 
                 }
@@ -341,10 +389,10 @@ void Submeniu_Credit(Client clienti[], int nr_clienti, int client_activ)
 
                 if (opt_data == 1)
                 {
-                    float suma_credit = clienti[client_activ].Afisare_Suma_Cont("credit");
-                    if (suma_credit != 0 && clienti[client_activ].Status_Cont("credit") == 1)
+                    float suma_credit = clienti[this->client_activ].Afisare_Suma_Cont("credit");
+                    if (suma_credit != 0 && clienti[this->client_activ].Status_Cont("credit") == 1)
                     {
-                        clienti[client_activ].Actualizare_Status_Cont("credit", -1);
+                        clienti[this->client_activ].Actualizare_Status_Cont("credit", -1);
                     }
                 }
                 cout << endl;
@@ -357,10 +405,10 @@ void Submeniu_Credit(Client clienti[], int nr_clienti, int client_activ)
                 ok_opt_credit = 1;
 
 
-                if (clienti[client_activ].Status_Cont("credit") == 1)
+                if (clienti[this->client_activ].Status_Cont("credit") == 1)
                 {
 
-                    if (clienti[client_activ].Afisare_Suma_Cont("credit") == 0)
+                    if (clienti[this->client_activ].Afisare_Suma_Cont("credit") == 0)
                     {
                         cout << "<Inchidere cont credit> Tastati 1 pentru a confirma." << endl << endl;
                         cout << "Optiunea dumneavoastra: ";
@@ -369,7 +417,7 @@ void Submeniu_Credit(Client clienti[], int nr_clienti, int client_activ)
                         cout << endl;
                         if (opt_inchidere_credit == 1)
                         {
-                            clienti[client_activ].Actualizare_Status_Cont("credit", 0);
+                            clienti[this->client_activ].Actualizare_Status_Cont("credit", 0);
                             cout << "Contul de credit a fost inchis cu succes." << endl << endl;
                         }
                     }
@@ -416,8 +464,8 @@ void Submeniu_Credit(Client clienti[], int nr_clienti, int client_activ)
             {
                 ok_opt_cr_cred = 1;
 
-                clienti[client_activ].Actualizare_Status_Cont("credit", 1);
-                clienti[client_activ].Actualizare_Suma_Cont("credit",0);
+                clienti[this->client_activ].Actualizare_Status_Cont("credit", 1);
+                clienti[this->client_activ].Actualizare_Suma_Cont("credit", 0);
                 cout << "Contul de credit a fost creat cu success" << endl << endl;
 
                 break;
@@ -443,14 +491,14 @@ void Submeniu_Credit(Client clienti[], int nr_clienti, int client_activ)
     }
 }
 
-void Submeniu_Depozit(Client clienti[], int nr_clienti, int client_activ)
+void Banca::Submeniu_Depozit()
 {
-    if (clienti[client_activ].Status_Cont("debit") == 1)
+    if (clienti[this->client_activ].Status_Cont("debit") == 1)
     {
         int optiune_depozit, ok_opt_depozit = 0;
-        float suma_depozit = clienti[client_activ].Afisare_Suma_Cont("depozit");
+        float suma_depozit = clienti[this->client_activ].Afisare_Suma_Cont("depozit");
         system("cls");
-        cout << "<Depozit cu dobanda fixa 5%/an> Suma depozitata: "<<suma_depozit<<" lei. Selectati optiunea dorita : " << endl << endl;
+        cout << "<Depozit cu dobanda fixa 5%/an> Suma depozitata: " << suma_depozit << " lei. Selectati optiunea dorita : " << endl << endl;
         cout << "< 1 > Depunere" << endl << "< 2 > Meniu data" << endl << endl;
         cout << "Optiunea dumneavoastra: ";
         cin >> optiune_depozit;
@@ -466,8 +514,8 @@ void Submeniu_Depozit(Client clienti[], int nr_clienti, int client_activ)
                 system("cls");
                 ok_opt_depozit = 1;
 
-                float suma_debit = clienti[client_activ].Afisare_Suma_Cont("debit");
-                float suma_depozit = clienti[client_activ].Afisare_Suma_Cont("depozit");
+                float suma_debit = clienti[this->client_activ].Afisare_Suma_Cont("debit");
+                float suma_depozit = clienti[this->client_activ].Afisare_Suma_Cont("depozit");
 
                 if (suma_debit == 0)
                 {
@@ -486,8 +534,8 @@ void Submeniu_Depozit(Client clienti[], int nr_clienti, int client_activ)
                     cout << "Introduceti o suma valida." << endl << endl;
                 }
 
-                clienti[client_activ].Actualizare_Suma_Cont("depozit",suma_depozit + suma_depusa);
-                clienti[client_activ].Actualizare_Suma_Cont("debit",suma_debit - suma_depusa);
+                clienti[this->client_activ].Actualizare_Suma_Cont("depozit", suma_depozit + suma_depusa);
+                clienti[this->client_activ].Actualizare_Suma_Cont("debit", suma_debit - suma_depusa);
                 cout << "Suma a fost depusa cu success." << endl << endl;
 
 
@@ -507,10 +555,10 @@ void Submeniu_Depozit(Client clienti[], int nr_clienti, int client_activ)
                 if (opt_data == 1)
                 {
                     cout << endl;
-                    float suma_debit = clienti[client_activ].Afisare_Suma_Cont("debit");
-                    float suma_depozit = clienti[client_activ].Afisare_Suma_Cont("depozit");
-                    clienti[client_activ].Actualizare_Suma_Cont("debit",suma_debit + 1.05f * suma_depozit);
-                    clienti[client_activ].Actualizare_Suma_Cont("depozit",0);
+                    float suma_debit = clienti[this->client_activ].Afisare_Suma_Cont("debit");
+                    float suma_depozit = clienti[this->client_activ].Afisare_Suma_Cont("depozit");
+                    clienti[this->client_activ].Actualizare_Suma_Cont("debit", suma_debit + 1.05f * suma_depozit);
+                    clienti[this->client_activ].Actualizare_Suma_Cont("depozit", 0);
                     cout << "Depozitul dumneavoastra a generat ";
                     cout << 0.05 * suma_depozit << " de lei care au fost adaugati in contul de debit." << endl;
                 }
@@ -536,7 +584,7 @@ void Submeniu_Depozit(Client clienti[], int nr_clienti, int client_activ)
     }
 }
 
-int Submeniu_Inregistrare(Client clienti[], int nr_clienti)
+void Banca::Submeniu_Inregistrare()
 {
     int ok_inregistrare = 0;
     while (ok_inregistrare == 0)
@@ -548,7 +596,7 @@ int Submeniu_Inregistrare(Client clienti[], int nr_clienti)
         cout << endl;
 
         int ok_cod_nou = 1;
-        for (int i = 0; i < nr_clienti; i++)
+        for (int i = 0; i < this->nr_clienti; i++)
         {
             if (clienti[i].Verificare_Cod(cod_client_nou) || cod_client_nou.length() != 4)
             {
@@ -581,27 +629,19 @@ int Submeniu_Inregistrare(Client clienti[], int nr_clienti)
 
 
             clienti[nr_clienti].Citire_Client(cod_client_nou, parola_client_nou, nume_client_nou, prenume_client_nou, 0, 0, 0, 0, 0);
-            nr_clienti++;
+            this->nr_clienti++;
             cout << "Contul dumneavoastra a fost creat cu success." << endl << endl;
         }
 
     }
-
-    return nr_clienti;
 }
 
-void Meniu_Principal(Client clienti[], int nr_clienti)
+void Banca::Meniu_Principal()
 {
-    int optiune_princ,ok_optiune_princ = 0;
+    int optiune_princ, ok_optiune_princ = 0;
     int utilizatori_stersi = 0;
-    Administrator administrator;
 
-    system("cls");
-    cout << "<Meniu principal> Selectati optiunea dorita:" << endl << endl;
-    cout << "< 1 > Log-in" << endl << "< 2 > Inregistrare client nou" << endl << "< 3 > Administrator" << endl<< "< 4 > Inchidere program" << endl << endl;
-    cout << "Optiunea dumneavoastra: ";
-    cin >> optiune_princ;
-    cout << endl;
+    optiune_princ = Revenire_Meniu_Principal_Text("meniu_principal");
 
     while (ok_optiune_princ == 0)
     {
@@ -613,22 +653,14 @@ void Meniu_Principal(Client clienti[], int nr_clienti)
             ok_optiune_princ = 1;
             system("cls");
 
-            int client_activ = Submeniu_Login(clienti, nr_clienti); // functie login
+            Submeniu_Login(); // functie login
 
             int optiune, ok_optiune = 0;
 
-            system("cls");
-            cout << "<Meniu client> <Cod client: ";
-            clienti[client_activ].Afisare_Cod();
-            cout << "> Selectati optiunea dorita:" << endl << endl;
-            cout << "< 1 > Informatii cont debit" << endl << "< 2 > Informatii cont credit" << endl << "< 3 > Informatii depozit" << endl;
-            cout << "< 4 > Inchidere cont" << endl << "< 5 > Intoarcere la meniul principal" << endl << endl;
-            cout << "Optiunea dumneavoastra: ";
-            cin >> optiune;
-            cout << endl;
+            optiune=Revenire_Meniu_Principal_Text("meniu_client");
 
             while (ok_optiune == 0)
-            {      
+            {
 
                 switch (optiune)
                 {
@@ -636,43 +668,27 @@ void Meniu_Principal(Client clienti[], int nr_clienti)
                 case 1: // informatii cont debit
                 {
                     ok_optiune = 1;
-                    
-                    Submeniu_Debit(clienti, nr_clienti,client_activ); // functie cont debit
-                    
+
+                    Submeniu_Debit(); // functie cont debit
+
                     if (Revenire_Meniu_Principal())
                     {
                         ok_optiune = 0;
-                        system("cls");
-                        cout << "<Meniu client> <Cod client: ";
-                        clienti[client_activ].Afisare_Cod();
-                        cout << "> Selectati optiunea dorita:" << endl << endl;
-                        cout << "< 1 > Informatii cont debit" << endl << "< 2 > Informatii cont credit" << endl << "< 3 > Informatii depozit" << endl;
-                        cout << "< 4 > Inchidere cont" << endl << "< 5 > Intoarcere la meniul principal" << endl << endl;
-                        cout << "Optiunea dumneavoastra: ";
-                        cin >> optiune;
-                        cout << endl;
+                        optiune = Revenire_Meniu_Principal_Text("meniu_client");
                     }
                     break;
                 }
-                
+
                 case 2: // informatii cont credit
                 {
                     ok_optiune = 1;
 
-                    Submeniu_Credit(clienti, nr_clienti, client_activ); // functie cont credit
+                    Submeniu_Credit(); // functie cont credit
 
                     if (Revenire_Meniu_Principal())
                     {
                         ok_optiune = 0;
-                        system("cls");
-                        cout << "<Meniu client> <Cod client: ";
-                        clienti[client_activ].Afisare_Cod();
-                        cout << "> Selectati optiunea dorita:" << endl << endl;
-                        cout << "< 1 > Informatii cont debit" << endl << "< 2 > Informatii cont credit" << endl << "< 3 > Informatii depozit" << endl;
-                        cout << "< 4 > Inchidere cont" << endl << "< 5 > Intoarcere la meniul principal" << endl << endl;
-                        cout << "Optiunea dumneavoastra: ";
-                        cin >> optiune;
-                        cout << endl;
+                        optiune = Revenire_Meniu_Principal_Text("meniu_client");
                     }
 
                     break;
@@ -682,20 +698,12 @@ void Meniu_Principal(Client clienti[], int nr_clienti)
                 {
                     ok_optiune = 1;
 
-                    Submeniu_Depozit(clienti, nr_clienti, client_activ); // functie depozit
+                    Submeniu_Depozit(); // functie depozit
 
                     if (Revenire_Meniu_Principal())
                     {
                         ok_optiune = 0;
-                        system("cls");
-                        cout << "<Meniu client> <Cod client: ";
-                        clienti[client_activ].Afisare_Cod();
-                        cout << "> Selectati optiunea dorita:" << endl << endl;
-                        cout << "< 1 > Informatii cont debit" << endl << "< 2 > Informatii cont credit" << endl << "< 3 > Informatii depozit" << endl;
-                        cout << "< 4 > Inchidere cont" << endl << "< 5 > Intoarcere la meniul principal" << endl << endl;
-                        cout << "Optiunea dumneavoastra: ";
-                        cin >> optiune;
-                        cout << endl;
+                        optiune = Revenire_Meniu_Principal_Text("meniu_client");
                     }
 
                     break;
@@ -706,28 +714,23 @@ void Meniu_Principal(Client clienti[], int nr_clienti)
                     ok_optiune = 1;
 
                     int sters = 1;
-                    if (clienti[client_activ].Status_Cont("debit") == 0 && clienti[client_activ].Status_Cont("credit") == 0)
+                    if (clienti[this->client_activ].Status_Cont("debit") == 0 && clienti[this->client_activ].Status_Cont("credit") == 0)
                     {
                         system("cls");
-                        cout << "Doriti sa inchideti definitiv contul? Tastati 1 in caz afirmativ."<<endl<<endl;
+                        cout << "Doriti sa inchideti definitiv contul? Tastati 1 in caz afirmativ." << endl << endl;
                         cout << "Optiunea dumneavoastra: ";
                         int opt_inchidere;
                         cin >> opt_inchidere;
                         if (opt_inchidere == 1)
                         {
-                            clienti[client_activ].Actualizare_Cod("0000");
+                            clienti[this->client_activ].Actualizare_Cod("0000");
                             utilizatori_stersi++;
                             cout << endl;
-                            cout << "Contul dumneavoastra a fost sters cu succes." << endl<< endl ;
+                            cout << "Contul dumneavoastra a fost sters cu succes." << endl << endl;
 
                             ok_optiune_princ = 0;
 
-                            system("cls");
-                            cout << "<Meniu principal> Selectati optiunea dorita:" << endl << endl;
-                            cout << "< 1 > Log-in" << endl << "< 2 > Inregistrare client nou" << endl << "< 3 > Administrator" << endl << "< 4 > Inchidere program" << endl << endl;
-                            cout << "Optiunea dumneavoastra: ";
-                            cin >> optiune_princ;
-                            cout << endl;
+                            optiune_princ = Revenire_Meniu_Principal_Text("meniu_principal");
                         }
 
                     }
@@ -738,15 +741,7 @@ void Meniu_Principal(Client clienti[], int nr_clienti)
                         if (Revenire_Meniu_Principal())
                         {
                             ok_optiune = 0;
-                            system("cls");
-                            cout << "<Meniu client> <Cod client: ";
-                            clienti[client_activ].Afisare_Cod();
-                            cout << "> Selectati optiunea dorita:" << endl << endl;
-                            cout << "< 1 > Informatii cont debit" << endl << "< 2 > Informatii cont credit" << endl << "< 3 > Informatii depozit" << endl;
-                            cout << "< 4 > Inchidere cont" << endl << "< 5 > Intoarcere la meniul principal" << endl << endl;
-                            cout << "Optiunea dumneavoastra: ";
-                            cin >> optiune;
-                            cout << endl;
+                            optiune = Revenire_Meniu_Principal_Text("meniu_client");
                         }
                     }
 
@@ -761,12 +756,7 @@ void Meniu_Principal(Client clienti[], int nr_clienti)
                     if (Revenire_Meniu_Principal())
                     {
                         ok_optiune_princ = 0;
-                        system("cls");
-                        cout << "<Meniu principal> Selectati optiunea dorita:" << endl << endl;
-                        cout << "< 1 > Log-in" << endl << "< 2 > Inregistrare client nou" << endl << "< 3 > Administrator" << endl << "< 4 > Inchidere program"<< endl << endl;
-                        cout << "Optiunea dumneavoastra: ";
-                        cin >> optiune_princ;
-                        cout << endl;
+                        optiune_princ = Revenire_Meniu_Principal_Text("meniu_principal");
                     }
 
                     break;
@@ -795,17 +785,12 @@ void Meniu_Principal(Client clienti[], int nr_clienti)
 
             cout << "<Meniu inregistrare client nou>" << endl << endl;
 
-            nr_clienti = Submeniu_Inregistrare(clienti, nr_clienti);
+            Submeniu_Inregistrare();
 
             if (Revenire_Meniu_Principal())
             {
                 ok_optiune_princ = 0;
-                system("cls");
-                cout << "<Meniu principal> Selectati optiunea dorita:" << endl << endl;
-                cout << "< 1 > Log-in" << endl << "< 2 > Inregistrare client nou" << endl << "< 3 > Administrator" << endl << "< 4 > Inchidere program" << endl << endl;
-                cout << "Optiunea dumneavoastra: ";
-                cin >> optiune_princ;
-                cout << endl;
+                optiune_princ = Revenire_Meniu_Principal_Text("meniu_principal");
             }
 
             break;
@@ -821,12 +806,7 @@ void Meniu_Principal(Client clienti[], int nr_clienti)
             if (Revenire_Meniu_Principal())
             {
                 ok_optiune_princ = 0;
-                system("cls");
-                cout << "<Meniu principal> Selectati optiunea dorita:" << endl << endl;
-                cout << "< 1 > Log-in" << endl << "< 2 > Inregistrare client nou" << endl << "< 3 > Administrator" << endl << "< 4 > Inchidere program" << endl << endl;
-                cout << "Optiunea dumneavoastra: ";
-                cin >> optiune_princ;
-                cout << endl;
+                optiune_princ = Revenire_Meniu_Principal_Text("meniu_principal");
             }
 
             break;
@@ -840,7 +820,7 @@ void Meniu_Principal(Client clienti[], int nr_clienti)
 
         default: //optiuni invalide
         {
-            while (optiune_princ != 1 && optiune_princ != 2 && optiune_princ != 3)
+            while (optiune_princ != 1 && optiune_princ != 2 && optiune_princ != 3 && optiune_princ != 4)
             {
                 cout << "Va rugam sa alegeti o optiune disponibila." << endl << endl;
                 cout << "Optiunea dumneavoastra: ";
@@ -853,9 +833,7 @@ void Meniu_Principal(Client clienti[], int nr_clienti)
         }
     }
 
-   // scriere in fisier 
+    // scriere in fisier 
 
     administrator.Salvare_Date(clienti, nr_clienti, utilizatori_stersi);
-
 }
-

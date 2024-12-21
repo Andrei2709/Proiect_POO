@@ -1,5 +1,5 @@
 4
-ABCD abcd Popescu Maria 1 105 1 415 0
-CDAB djab Lautaru Cosmin 0 -1 -1 29400.1 0
+ABCD abcd Popescu Maria 1 107.5 1 520 0
+CDAB djab Lautaru Cosmin 0 -1 -1 29000 0
 DJAB cdab Potecaru Cosmina 1 398 1 0 0
 TEST parolatest Popescu Ion 1 300 1 105 0

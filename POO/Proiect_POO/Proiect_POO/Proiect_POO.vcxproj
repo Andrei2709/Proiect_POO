@@ -127,15 +127,17 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="administrator.cpp" />
+    <ClCompile Include="banca.cpp" />
     <ClCompile Include="client.cpp" />
     <ClCompile Include="cont.cpp" />
-    <ClCompile Include="meniu.cpp" />
     <ClCompile Include="Proiect_POO.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="administrator.h" />
+    <ClInclude Include="banca.h" />
     <ClInclude Include="client.h" />
     <ClInclude Include="cont.h" />
-    <ClInclude Include="meniu.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="clienti.txt" />

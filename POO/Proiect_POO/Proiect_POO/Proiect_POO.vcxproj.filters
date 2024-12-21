@@ -21,10 +21,13 @@
     <ClCompile Include="client.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="meniu.cpp">
+    <ClCompile Include="cont.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="cont.cpp">
+    <ClCompile Include="administrator.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="banca.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -32,10 +35,13 @@
     <ClInclude Include="client.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="meniu.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
     <ClInclude Include="cont.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="administrator.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="banca.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
