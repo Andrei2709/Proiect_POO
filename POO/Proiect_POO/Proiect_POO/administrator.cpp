@@ -7,7 +7,7 @@ using namespace std;
 
 Administrator::Administrator()
 {
-    Citire_Client("ADMIN", "parola_admin", "", "", 0, 0, 0, 0, 0);
+    Citire_Client("ADMIN", "parola_admin", "", "", 0, 0, 0, 0, 0); // PAROLA ADMIN = parola_admin
 }
 
 void Administrator::Lista_Clienti(Administrator administrator, Client clienti[], int nr_clienti)

@@ -1,5 +1,4 @@
 #include <iostream>
-#include <fstream>
 #include <string>
 #include "client.h"
 #include "banca.h"
@@ -12,12 +11,9 @@ int main()
 {
     Banca banca;
 
-    banca.Citire_Lista_Clienti();
+    banca.Citire_Lista_Clienti(); // citire din fisier 
 
-   //ofstream fout("TEST.txt");
-   //fout << nr_clienti << endl;
-
-    banca.Meniu_Principal();
+    banca.Meniu_Principal(); // PAROLA ADMIN = parola_admin
     
     return 0;
 }

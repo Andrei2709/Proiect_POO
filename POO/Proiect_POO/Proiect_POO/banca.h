@@ -8,6 +8,7 @@ class Banca
 {
 public:
 
+	Banca();
 	void Citire_Lista_Clienti();
 	void Meniu_Principal();
 	bool Revenire_Meniu_Principal();

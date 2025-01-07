@@ -4,9 +4,15 @@
 
 using namespace std;
 
+Banca::Banca()
+{
+    this->nr_clienti = 0;
+    this->client_activ = 0;
+}
+
 void Banca::Citire_Lista_Clienti()
 {
-    ifstream fin("clienti.txt"); // system("cls");
+    ifstream fin("clienti.txt"); 
     fin >> this->nr_clienti; // numarul de clienti
 
     string cod_client = "";
@@ -50,9 +56,9 @@ bool Banca::Revenire_Meniu_Principal()
     }
 }
 
-int Banca::Revenire_Meniu_Principal_Text(string tip_meniu)
+int Banca::Revenire_Meniu_Principal_Text(string tip_meniu) // afisare text in functie de meniul accesat
 {
-    int optiune;
+    int optiune=-1;
 
     if (tip_meniu == "meniu_client")
     {
@@ -125,7 +131,7 @@ void Banca::Submeniu_Debit()
 
             switch (optiune_debit)
             {
-            case 1:
+            case 1: // afisare suma din cont
             {
                 system("cls");
                 ok_opt_debit = 1;
@@ -137,20 +143,20 @@ void Banca::Submeniu_Debit()
                 break;
             }
 
-            case 2:
+            case 2: // retragere numerar
             {
                 system("cls");
                 ok_opt_debit = 1;
 
                 float suma_debit = clienti[this->client_activ].Afisare_Suma_Cont("debit");
 
-                float suma_retrasa = 0;
-                while (suma_retrasa<1 || suma_retrasa>suma_debit)
+                float suma_retrasa = -1;
+                while (suma_retrasa<0 || suma_retrasa>suma_debit)
                 {
                     cout << "Introduceti suma pe care doriti sa o retrageti: ";
                     cin >> suma_retrasa;
                     cout << endl;
-                    if (suma_retrasa > 0 && suma_retrasa <= suma_debit)
+                    if (suma_retrasa >= 0 && suma_retrasa <= suma_debit)
                         break;
                     cout << "Introduceti o suma valida." << endl << endl;
                 }
@@ -160,7 +166,7 @@ void Banca::Submeniu_Debit()
                 break;
             }
 
-            case 3:
+            case 3: // depunere numerar
             {
                 system("cls");
                 ok_opt_debit = 1;
@@ -183,7 +189,7 @@ void Banca::Submeniu_Debit()
                 break;
             }
 
-            case 4:
+            case 4: // inchidere cont debit
             {
                 system("cls");
                 ok_opt_debit = 1;
@@ -213,7 +219,7 @@ void Banca::Submeniu_Debit()
         }
 
     }
-    else
+    else // creare cont debit
     {
         system("cls");
         cout << "Nu exista un cont de debit asociat contului dumneavoastra. Doriti sa creati unul?" << endl << endl;
@@ -446,7 +452,7 @@ void Banca::Submeniu_Credit()
         }
 
     }
-    else
+    else // creare cont credit
     {
         system("cls");
         cout << "Nu exista un cont de credit asociat contului dumneavoastra. Doriti sa creati unul?" << endl << endl;
@@ -608,7 +614,7 @@ void Banca::Submeniu_Inregistrare()
 
         if (ok_cod_nou == 0 || (cod_client_nou[0] < 'A' || cod_client_nou[0] > 'Z') || (cod_client_nou[1] < 'A' || cod_client_nou[1] > 'Z') || (cod_client_nou[2] < 'A' || cod_client_nou[2] > 'Z') || (cod_client_nou[3] < 'A' || cod_client_nou[3] > 'Z'))
         {
-            cout << "Cod invalid sau deja exista. ";
+            cout << "Cod invalid sau deja exista. "; // verificare disponibilitate/corectitudine cod client
         }
         else
         {
@@ -713,7 +719,6 @@ void Banca::Meniu_Principal()
                 {
                     ok_optiune = 1;
 
-                    int sters = 1;
                     if (clienti[this->client_activ].Status_Cont("debit") == 0 && clienti[this->client_activ].Status_Cont("credit") == 0)
                     {
                         system("cls");
@@ -729,10 +734,16 @@ void Banca::Meniu_Principal()
                             cout << "Contul dumneavoastra a fost sters cu succes." << endl << endl;
 
                             ok_optiune_princ = 0;
-
                             optiune_princ = Revenire_Meniu_Principal_Text("meniu_principal");
                         }
-
+                        else
+                        {
+                            if (Revenire_Meniu_Principal())
+                            {
+                                ok_optiune = 0;
+                                optiune = Revenire_Meniu_Principal_Text("meniu_client");
+                            }
+                        }
                     }
                     else
                     {
